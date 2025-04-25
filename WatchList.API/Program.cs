@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using WatchList.DataAccess.Context;
+
 namespace WatchList.API
 {
     public class Program
@@ -8,6 +11,10 @@ namespace WatchList.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<WatchListContext>(options => 
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
