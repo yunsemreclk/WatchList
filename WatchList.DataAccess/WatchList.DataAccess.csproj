@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WatchList.Entity\WatchList.Entity.csproj" />
+  </ItemGroup>
+
 </Project>

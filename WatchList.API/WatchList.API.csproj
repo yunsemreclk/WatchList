@@ -14,4 +14,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WatchList.Business\WatchList.Business.csproj" />
+    <ProjectReference Include="..\WatchList.DTO\WatchList.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

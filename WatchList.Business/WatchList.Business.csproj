@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WatchList.DataAccess\WatchList.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
