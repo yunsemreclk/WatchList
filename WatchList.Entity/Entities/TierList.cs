@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WatchList.Entity.Entity
+namespace WatchList.Entity.Entites
 {
     public class TierList
     {
-        public Guid Id { get; set; }
-        public string UserId { get; set; }
-        public User User { get; set; }
-
+        public int Id { get; set; }
         public string Title { get; set; }
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
@@ -21,12 +18,12 @@ namespace WatchList.Entity.Entity
     }
     public class TierListItem
     {
-        public Guid Id { get; set; }
-        public Guid TierListId { get; set; }
+        public int Id { get; set; }
+        public int TierListId { get; set; }
         public TierList TierList { get; set; }
 
         public string ItemType { get; set; } // Movie or Series
-        public Guid ItemId { get; set; } // MovieId or SeriesId
+        public int ItemId { get; set; } // MovieId or SeriesId
         public string Tier { get; set; } // S, A, B, C, D, F
         public string Title { get; set; }
         public string PosterUrl { get; set; }

@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WatchList.Entity.Entity
+namespace WatchList.Entity.Entites
 {
     public class Like
     {
-        public Guid Id { get; set; }
-        public string UserId { get; set; }
-
+        public int Id { get; set; }
         public string TargetType { get; set; } // MovieList, SeriesList, TierList
-        public Guid TargetId { get; set; }
+        public int TargetId { get; set; }
 
         public DateTime LikedDate { get; set; } = DateTime.UtcNow;
     }

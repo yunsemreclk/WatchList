@@ -1,6 +1,11 @@
 
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using WatchList.Business.Absract;
+using WatchList.Business.Concrate;
+using WatchList.DataAccess.Abstract;
 using WatchList.DataAccess.Context;
+using WatchList.DataAccess.Repositories;
 
 namespace WatchList.API
 {
@@ -11,6 +16,13 @@ namespace WatchList.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            //Oluþturduðum repositorylerilerin(depo), api tarafýnda registration(kayýt) iþlerimin yapýlmasý
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly()); //registration
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericManager<>));
+
+
             builder.Services.AddDbContext<WatchListContext>(options => 
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));

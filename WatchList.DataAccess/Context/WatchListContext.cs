@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WatchList.Entity.Entity;
+using WatchList.Entity.Entites;
 
 namespace WatchList.DataAccess.Context
 {
@@ -14,8 +14,6 @@ namespace WatchList.DataAccess.Context
         {
 
         }
-
-        public DbSet<User> Users { get; set; }
 
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Series> Series { get; set; }
@@ -45,10 +43,6 @@ namespace WatchList.DataAccess.Context
                 .HasIndex(s => new { s.SeriesListId, s.SeriesId })
                 .IsUnique();
 
-            //Bir kullanıcı aynı öğeyi (liste, tierlist vs.) iki kez beğenemesin diye benzersiz indeks
-            modelBuilder.Entity<Like>()
-                .HasIndex(l => new { l.UserId, l.TargetId, l.TargetType })
-                .IsUnique();
 
             //Movie silindiğinde, MovieListItem üzerinden zincirleme silme olmasın
             modelBuilder.Entity<MovieListItem>()

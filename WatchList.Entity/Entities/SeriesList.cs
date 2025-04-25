@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WatchList.Entity.Entity
+namespace WatchList.Entity.Entites
 {
     public class SeriesList
     {
-        public Guid Id { get; set; }
-        public string UserId { get; set; }
-        public User User { get; set; }
-
+        public int Id { get; set; }
         public string Title { get; set; }
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
@@ -22,11 +19,11 @@ namespace WatchList.Entity.Entity
 
     public class SeriesListItem
     {
-        public Guid Id { get; set; }
-        public Guid SeriesListId { get; set; }
+        public int Id { get; set; }
+        public int SeriesListId { get; set; }
         public SeriesList SeriesList { get; set; }
 
-        public Guid SeriesId { get; set; }
+        public int SeriesId { get; set; }
         public Series Series { get; set; }
     }
 

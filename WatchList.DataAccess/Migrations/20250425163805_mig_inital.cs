@@ -6,29 +6,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WatchList.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class mig_initial : Migration
+    public partial class mig_inital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MovieLists",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsShared = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -36,20 +24,14 @@ namespace WatchList.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MovieLists", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MovieLists_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReleaseYear = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: true),
@@ -61,20 +43,14 @@ namespace WatchList.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Movies_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Series",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: true),
                     CurrentSeason = table.Column<int>(type: "int", nullable: false),
@@ -89,20 +65,14 @@ namespace WatchList.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Series", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Series_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SeriesLists",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsShared = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -110,20 +80,14 @@ namespace WatchList.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeriesLists", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SeriesLists_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TierLists",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsShared = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -131,21 +95,16 @@ namespace WatchList.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TierLists", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TierLists_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "MovieListItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MovieListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MovieId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MovieListId = table.Column<int>(type: "int", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -166,9 +125,10 @@ namespace WatchList.DataAccess.Migrations
                 name: "SeriesListItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SeriesListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SeriesListId = table.Column<int>(type: "int", nullable: false),
+                    SeriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -189,14 +149,14 @@ namespace WatchList.DataAccess.Migrations
                 name: "Likes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TargetType = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TargetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TargetType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TargetId = table.Column<int>(type: "int", nullable: false),
                     LikedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MovieListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    SeriesListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    TierListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    MovieListId = table.Column<int>(type: "int", nullable: true),
+                    SeriesListId = table.Column<int>(type: "int", nullable: true),
+                    TierListId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,10 +182,11 @@ namespace WatchList.DataAccess.Migrations
                 name: "TierListItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TierListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TierListId = table.Column<int>(type: "int", nullable: false),
                     ItemType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
                     Tier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PosterUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -256,12 +217,6 @@ namespace WatchList.DataAccess.Migrations
                 column: "TierListId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_UserId_TargetId_TargetType",
-                table: "Likes",
-                columns: new[] { "UserId", "TargetId", "TargetType" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MovieListItems_MovieId",
                 table: "MovieListItems",
                 column: "MovieId");
@@ -271,21 +226,6 @@ namespace WatchList.DataAccess.Migrations
                 table: "MovieListItems",
                 columns: new[] { "MovieListId", "MovieId" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MovieLists_UserId",
-                table: "MovieLists",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movies_UserId",
-                table: "Movies",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Series_UserId",
-                table: "Series",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SeriesListItems_SeriesId",
@@ -299,19 +239,9 @@ namespace WatchList.DataAccess.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeriesLists_UserId",
-                table: "SeriesLists",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TierListItems_TierListId",
                 table: "TierListItems",
                 column: "TierListId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TierLists_UserId",
-                table: "TierLists",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -343,9 +273,6 @@ namespace WatchList.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "TierLists");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

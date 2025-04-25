@@ -22,34 +22,32 @@ namespace WatchList.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Like", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.Like", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("LikedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("MovieListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("MovieListId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("SeriesListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("SeriesListId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("TargetId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("TargetId")
+                        .HasColumnType("int");
 
                     b.Property<string>("TargetType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TierListId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("TierListId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -59,17 +57,16 @@ namespace WatchList.DataAccess.Migrations
 
                     b.HasIndex("TierListId");
 
-                    b.HasIndex("UserId", "TargetId", "TargetType")
-                        .IsUnique();
-
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Movie", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.Movie", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -91,25 +88,21 @@ namespace WatchList.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("WatchedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.MovieList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.MovieList", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -121,28 +114,24 @@ namespace WatchList.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("MovieLists");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.MovieListItem", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.MovieListItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("MovieListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovieListId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -154,11 +143,13 @@ namespace WatchList.DataAccess.Migrations
                     b.ToTable("MovieListItems");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Series", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.Series", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -192,22 +183,18 @@ namespace WatchList.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Series");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.SeriesList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.SeriesList", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -219,28 +206,24 @@ namespace WatchList.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("SeriesLists");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.SeriesListItem", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.SeriesListItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("SeriesId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("SeriesListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SeriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeriesListId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -252,11 +235,13 @@ namespace WatchList.DataAccess.Migrations
                     b.ToTable("SeriesListItems");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.TierList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.TierList", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -268,25 +253,21 @@ namespace WatchList.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TierLists");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.TierListItem", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.TierListItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ItemType")
                         .IsRequired()
@@ -300,8 +281,8 @@ namespace WatchList.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TierListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("TierListId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -314,66 +295,30 @@ namespace WatchList.DataAccess.Migrations
                     b.ToTable("TierListItems");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.User", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.Like", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.Like", b =>
-                {
-                    b.HasOne("WatchList.Entity.Entity.MovieList", null)
+                    b.HasOne("WatchList.Entity.Entites.MovieList", null)
                         .WithMany("Likes")
                         .HasForeignKey("MovieListId");
 
-                    b.HasOne("WatchList.Entity.Entity.SeriesList", null)
+                    b.HasOne("WatchList.Entity.Entites.SeriesList", null)
                         .WithMany("Likes")
                         .HasForeignKey("SeriesListId");
 
-                    b.HasOne("WatchList.Entity.Entity.TierList", null)
+                    b.HasOne("WatchList.Entity.Entites.TierList", null)
                         .WithMany("Likes")
                         .HasForeignKey("TierListId");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Movie", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.MovieListItem", b =>
                 {
-                    b.HasOne("WatchList.Entity.Entity.User", "User")
-                        .WithMany("Movies")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.MovieList", b =>
-                {
-                    b.HasOne("WatchList.Entity.Entity.User", "User")
-                        .WithMany("MovieLists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.MovieListItem", b =>
-                {
-                    b.HasOne("WatchList.Entity.Entity.Movie", "Movie")
+                    b.HasOne("WatchList.Entity.Entites.Movie", "Movie")
                         .WithMany("MovieListItems")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("WatchList.Entity.Entity.MovieList", "MovieList")
+                    b.HasOne("WatchList.Entity.Entites.MovieList", "MovieList")
                         .WithMany("Movies")
                         .HasForeignKey("MovieListId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -384,37 +329,15 @@ namespace WatchList.DataAccess.Migrations
                     b.Navigation("MovieList");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Series", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.SeriesListItem", b =>
                 {
-                    b.HasOne("WatchList.Entity.Entity.User", "User")
-                        .WithMany("Series")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.SeriesList", b =>
-                {
-                    b.HasOne("WatchList.Entity.Entity.User", "User")
-                        .WithMany("SeriesLists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.SeriesListItem", b =>
-                {
-                    b.HasOne("WatchList.Entity.Entity.Series", "Series")
+                    b.HasOne("WatchList.Entity.Entites.Series", "Series")
                         .WithMany("SeriesListItems")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("WatchList.Entity.Entity.SeriesList", "SeriesList")
+                    b.HasOne("WatchList.Entity.Entites.SeriesList", "SeriesList")
                         .WithMany("Series")
                         .HasForeignKey("SeriesListId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -425,20 +348,9 @@ namespace WatchList.DataAccess.Migrations
                     b.Navigation("SeriesList");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.TierList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.TierListItem", b =>
                 {
-                    b.HasOne("WatchList.Entity.Entity.User", "User")
-                        .WithMany("TierLists")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.TierListItem", b =>
-                {
-                    b.HasOne("WatchList.Entity.Entity.TierList", "TierList")
+                    b.HasOne("WatchList.Entity.Entites.TierList", "TierList")
                         .WithMany("Items")
                         .HasForeignKey("TierListId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -447,48 +359,35 @@ namespace WatchList.DataAccess.Migrations
                     b.Navigation("TierList");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Movie", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.Movie", b =>
                 {
                     b.Navigation("MovieListItems");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.MovieList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.MovieList", b =>
                 {
                     b.Navigation("Likes");
 
                     b.Navigation("Movies");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.Series", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.Series", b =>
                 {
                     b.Navigation("SeriesListItems");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.SeriesList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.SeriesList", b =>
                 {
                     b.Navigation("Likes");
 
                     b.Navigation("Series");
                 });
 
-            modelBuilder.Entity("WatchList.Entity.Entity.TierList", b =>
+            modelBuilder.Entity("WatchList.Entity.Entites.TierList", b =>
                 {
                     b.Navigation("Items");
 
                     b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("WatchList.Entity.Entity.User", b =>
-                {
-                    b.Navigation("MovieLists");
-
-                    b.Navigation("Movies");
-
-                    b.Navigation("Series");
-
-                    b.Navigation("SeriesLists");
-
-                    b.Navigation("TierLists");
                 });
 #pragma warning restore 612, 618
         }
