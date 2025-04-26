@@ -10,4 +10,10 @@
     <ProjectReference Include="..\WatchList.Entity\WatchList.Entity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\TierListDtos\" />
+    <Folder Include="DTOs\SeriesListDtos\" />
+    <Folder Include="DTOs\SeriesDtos\" />
+  </ItemGroup>
+
 </Project>
