@@ -14,10 +14,11 @@ namespace WatchList.DTO.DTOs.TierListDtos
         public string Title { get; set; }
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+
     }
     public class CreateTierListItemDto
     {
-        public ICollection<int> TierListIds { get; set; }
+        public int TierListId { get; set; }
 
         public string ItemType { get; set; } // Movie or Series
         public int ItemId { get; set; } // MovieId or SeriesId

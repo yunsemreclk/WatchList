@@ -4,9 +4,9 @@ using WatchList.Entity.Entites;
 
 namespace WatchList.API.Mapping
 {
-    public class LikeMapping : Profile
+    public class LikeProfile : Profile
     {
-        public LikeMapping()
+        public LikeProfile()
         {
             CreateMap<CreateLikeDto,Like>().ReverseMap();
             CreateMap<ListLikeDto,Like>().ReverseMap();

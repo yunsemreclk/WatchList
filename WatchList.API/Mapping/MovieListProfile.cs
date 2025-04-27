@@ -4,9 +4,9 @@ using WatchList.Entity.Entites;
 
 namespace WatchList.API.Mapping
 {
-    public class MovieListMapping : Profile
+    public class MovieListProfile : Profile
     {
-        public MovieListMapping()
+        public MovieListProfile()
         {
             CreateMap<CreateMovieListDto, MovieList>().ReverseMap();
             CreateMap<ListMovieListDto, MovieList>().ReverseMap();
