@@ -7,7 +7,7 @@ using WatchList.Entity.Entites;
 
 namespace WatchList.DTO.DTOs.SeriesDtos
 {
-    internal class ListSeriesDto
+    public class ListSeriesDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

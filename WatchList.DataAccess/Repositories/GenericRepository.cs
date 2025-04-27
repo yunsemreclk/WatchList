@@ -19,6 +19,7 @@ namespace WatchList.DataAccess.Repositories
             return Table.Count();
         }
 
+        //Tierlist Kontrol edilecek
         public void Create(T entity) //Tabloya eklemem
         {
             Table.Add(entity);
