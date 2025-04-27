@@ -4,58 +4,41 @@
 @{
 	ViewData["Title"] = "Film Sayfası";
 	Layout = "~/Views/Shared/_AdminLayout.cshtml";
-}
-
-
-
-
+ }
 
 
 <h2>Film Listesi</h2>
 
-<table class="table table-hover table-bordered mt-4">
-    <thead class="thead-dark">
+<a asp-action="CreateMovie" asp-controller="Movie" asp-area="Admin" class="btn btn-outline-primary">Yeni Film Ekle</a>
+
+<table class="table table-hover">
+    <thead>
         <tr>
-            <th>#</th>
+            <th>Id</th>
             <th>Başlık</th>
-            <th>Poster</th>
             <th>Çıkış Yılı</th>
+            <th>Poster</th>
             <th>İşlemler</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Any())
-        {
-            int count = 1;
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@count</td>
-                    <td>@item.Title</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(item.PosterUrl))
-                        {
-                            <img src="@item.PosterUrl" alt="Poster" style="width:50px; height:auto;" />
-                        }
-                        else
-                        {
-                            <span>Yok</span>
-                        }
-                    </td>
-                    <td>@item.ReleaseYear</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-warning">Düzenle</a>
-                        <a href="#" class="btn btn-sm btn-danger">Sil</a>
-                    </td>
-                </tr>
-                count++;
-            }
-        }
-        else
+        @foreach (var movie in Model)
         {
             <tr>
-                <td colspan="5" class="text-center">Hiç film bulunamadı.</td>
+                <td>@movie.Id</td>
+                <td>@movie.Title</td>
+                <td>@movie.ReleaseYear</td>
+                <td>
+                    <img src="@movie.PosterUrl" alt="Poster" width="80" height="120" />
+                </td>
+                <td>
+                    <a asp-action="DeleteMovie" asp-controller="Movie" asp-area="Admin" asp-route-id="@movie.Id" class="btn btn-outline-danger">Sil</a>
+                    <a asp-action="UpdateMovie" asp-controller="Movie" asp-area="Admin" asp-route-id="@movie.Id" class="btn btn-outline-info">Güncelle</a>
+
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+
