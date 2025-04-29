@@ -20,6 +20,7 @@ namespace WatchList.WebUI
             builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<WatchListContext>();
             builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
