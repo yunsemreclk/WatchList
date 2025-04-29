@@ -4,6 +4,7 @@ using WatchList.WebUI.Helpers;
 
 namespace WatchList.WebUI.Controllers
 {
+
     public class MovieController : Controller
     {
         private readonly HttpClient _client = HttpClientInstance.CreateClient();

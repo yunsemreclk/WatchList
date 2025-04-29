@@ -10,41 +10,47 @@ namespace WatchList.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SeriesListsController(IGenericService<SeriesList> _SeriesListService, IMapper _mapper) : ControllerBase
+    public class SeriesListsController(IGenericService<SeriesList> _seriesListService, IMapper _mapper) : ControllerBase
     {
         [HttpGet]
         public IActionResult Get()
         {
-            var values = _SeriesListService.TGetList();
+            var values = _seriesListService.TGetList();
             return Ok(values);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var value = _SeriesListService.TGetById(id);
+            var value = _seriesListService.TGetById(id);
             return Ok(value);
         }
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
 
-            _SeriesListService.TDelete(id);
+            _seriesListService.TDelete(id);
             return Ok("Silindi");
         }
         [HttpPost]
         public IActionResult Create(CreateSeriesListDto createSeriesListDto)
         {
             var newValue = _mapper.Map<SeriesList>(createSeriesListDto);
-            _SeriesListService.TCreate(newValue);
+            _seriesListService.TCreate(newValue);
             return Ok("Oluşturuldu");
         }
         [HttpPut]
         public IActionResult Update(UpdateSeriesListDto updateSeriesListDto)
         {
             var value = _mapper.Map<SeriesList>(updateSeriesListDto);
-            _SeriesListService.TUpdate(value);
+            _seriesListService.TUpdate(value);
             return Ok("Güncellendi");
+        }
+        [HttpGet("GetSharedSeriesList")]
+        public IActionResult GetSharedSeriesList(int id)
+        {
+            var values = _seriesListService.TGetFilteredList(x => x.IsShared == true);
+            return Ok(values);
         }
 
     }

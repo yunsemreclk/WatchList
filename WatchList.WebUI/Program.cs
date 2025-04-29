@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using WatchList.DataAccess.Context;
+using WatchList.Entity.Entities;
+using WatchList.WebUI.Services.UserServices;
+
 namespace WatchList.WebUI
 {
     public class Program
@@ -7,7 +12,12 @@ namespace WatchList.WebUI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddDbContext<WatchListContext>(opt =>
+            {
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
+            });
+            builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<WatchListContext>();
             builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews();
 

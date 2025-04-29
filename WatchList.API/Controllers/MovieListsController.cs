@@ -46,6 +46,13 @@ namespace WatchList.API.Controllers
             _movieListService.TUpdate(value);
             return Ok("Güncellendi");
         }
+
+        [HttpGet("GetSharedMovieList")]
+        public IActionResult GetSharedMovieList(int id)
+        {
+            var values = _movieListService.TGetFilteredList(x => x.IsShared == true);
+            return Ok(values);
+        }
     }
 
     [Route("api/[controller]")]

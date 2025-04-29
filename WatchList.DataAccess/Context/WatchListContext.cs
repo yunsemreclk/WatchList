@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WatchList.Entity.Entites;
+using WatchList.Entity.Entities;
 
 namespace WatchList.DataAccess.Context
 {
-    public class WatchListContext : DbContext
+    public class WatchListContext : IdentityDbContext<AppUser,AppRole,int>
     {
         public WatchListContext(DbContextOptions options): base(options)//appsettings'de tutmak için base     
         {

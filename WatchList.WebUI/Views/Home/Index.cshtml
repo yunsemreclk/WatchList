@@ -2,7 +2,151 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron bg-dark text-white">
+    <div class="container">
+        <h1 class="display-4">Dizi & Film Takip</h1>
+        <p class="lead">İzlediğiniz dizileri ve filmleri kolayca takip edin, başkalarının listelerini keşfedin!</p>
+        <p>
+            <a class="btn btn-primary btn-lg" asp-controller="Movie" asp-action="Index" role="button">
+                <i class="fas fa-film mr-2"></i>Filmlerim
+            </a>
+            <a class="btn btn-success btn-lg" asp-controller="Series" asp-action="Index" role="button">
+                <i class="fas fa-tv mr-2"></i>Dizilerim
+            </a>
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar mr-2"></i>İstatistiklerim</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="display-4">42</div>
+                        <div class="small text-muted">Film</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="display-4">17</div>
+                        <div class="small text-muted">Dizi</div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <div class="h5">Toplam İzleme Süresi</div>
+                    <div class="display-4">127 <small>saat</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-clock mr-2"></i>Son İzlediklerim</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <img src="~/images/default-movie.png" width="48" height="48" class="mr-3">
+                        <div>
+                            <h6 class="mb-1">Interstellar</h6>
+                            <small class="text-muted">Film • 20 Nisan 2025</small>
+                        </div>
+                        <div class="ml-auto">
+                            <span class="badge badge-primary">9/10</span>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <img src="~/images/default-series.png" width="48" height="48" class="mr-3">
+                        <div>
+                            <h6 class="mb-1">Breaking Bad</h6>
+                            <small class="text-muted">Dizi • 15 Nisan 2025 • S5E14</small>
+                        </div>
+                        <div class="ml-auto">
+                            <span class="badge badge-primary">10/10</span>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action d-flex align-items-center">
+                        <img src="~/images/default-movie.png" width="48" height="48" class="mr-3">
+                        <div>
+                            <h6 class="mb-1">The Shawshank Redemption</h6>
+                            <small class="text-muted">Film • 10 Nisan 2025</small>
+                        </div>
+                        <div class="ml-auto">
+                            <span class="badge badge-primary">9/10</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-sm btn-outline-secondary">Tümünü Gör</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-compass mr-2"></i>Keşfet: Popüler Listeler</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">En İyi Bilim Kurgu Filmleri</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">74 film</h6>
+                                <p class="card-text">Tüm zamanların en çok beğenilen bilim kurgu filmlerini içeren kapsamlı bir liste.</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="card-link">Görüntüle</a>
+                                    <span>
+                                        <i class="fas fa-heart text-danger"></i> 842
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Netflix'te Kaçırılmaması Gerekenler</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">35 dizi</h6>
+                                <p class="card-text">Netflix'te bulunan ve mutlaka izlenmesi gereken orijinal dizilerin listesi.</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="card-link">Görüntüle</a>
+                                    <span>
+                                        <i class="fas fa-heart text-danger"></i> 621
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">90'ların Unutulmaz Filmleri</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">58 film</h6>
+                                <p class="card-text">90'lı yılların en çok ses getiren, unutulmaz filmlerini bir araya getiren nostaljik liste.</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="#" class="card-link">Görüntüle</a>
+                                    <span>
+                                        <i class="fas fa-heart text-danger"></i> 489
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Explore" asp-action="Index" class="btn btn-sm btn-outline-info">Daha Fazla Keşfet</a>
+            </div>
+        </div>
+    </div>
 </div>

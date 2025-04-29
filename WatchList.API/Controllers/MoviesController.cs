@@ -45,5 +45,6 @@ namespace WatchList.API.Controllers
             _movieService.TUpdate(value);
             return Ok("Güncellendi");
         }
+
     }
 }
