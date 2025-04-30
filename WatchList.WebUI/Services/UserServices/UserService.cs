@@ -33,9 +33,27 @@ namespace WatchList.WebUI.Services.UserServices
 
         }
 
-        public Task<bool> LoginAsync(UserLoginDto userLoginDto)
+        public async Task<string> LoginAsync(UserLoginDto userLoginDto)
         {
-            throw new NotImplementedException();
+            var user = await userManager.FindByEmailAsync(userLoginDto.Email);
+            if (user == null) 
+            {
+                return null;
+            }
+            var result = await signInManager.PasswordSignInAsync(user,userLoginDto.Password,false,false); //sürekli açık kalsın mı false
+            if (!result.Succeeded) return null;
+            else 
+            {
+                var IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
+                if (IsAdmin) return "Admin";
+                var IsUser = await userManager.IsInRoleAsync(user, "User");
+                if (IsUser) return "User";
+            }
+
+            return null;
+
+
+            
         }
 
         public Task<bool> LogoutAsync()

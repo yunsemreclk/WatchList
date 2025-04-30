@@ -6,12 +6,12 @@ namespace WatchList.WebUI.Controllers
 {
     public class RegisterController(IUserService userService) : Controller
     {
-        public IActionResult Signup()
+        public IActionResult SignUp()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Signup(UserRegisterDto userRegisterDto)
+        public async Task<IActionResult> SignUp(UserRegisterDto userRegisterDto)
         {
             var result = await userService.CreateUserAsync(userRegisterDto);
             if (!result.Succeeded || !ModelState.IsValid)           

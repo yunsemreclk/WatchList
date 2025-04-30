@@ -1,0 +1,47 @@
+﻿@model WatchList.WebUI.DTOs.UserDtos.UserLoginDto
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow rounded-4">
+                <div class="card-header bg-dark text-white text-center rounded-top-4">
+                    <h4><i class="bi bi-person-plus me-2"></i>Giriş Yap</h4>
+                </div>
+                <div class="card-body">
+
+                    <form asp-action="SignIn" method="post">
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">E-Posta</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Şifre</label>
+                            <input asp-for="Password" class="form-control" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+
+                        <p>
+                            @Html.ValidationSummary()
+                        </p>
+
+                        <button type="submit" class="btn btn-dark w-100 rounded-pill">
+                            <i class="bi bi-person-plus me-1"></i> Kayıt Ol
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

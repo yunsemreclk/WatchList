@@ -7,7 +7,7 @@ namespace WatchList.WebUI.Services.UserServices
     {
         Task<IdentityResult> CreateUserAsync(UserRegisterDto userRegisterDto);
 
-        Task<bool> LoginAsync(UserLoginDto userLoginDto);
+        Task<string> LoginAsync(UserLoginDto userLoginDto);
 
         Task<bool> LogoutAsync();
 

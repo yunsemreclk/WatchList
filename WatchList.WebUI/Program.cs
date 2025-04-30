@@ -1,6 +1,9 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WatchList.DataAccess.Context;
 using WatchList.Entity.Entities;
+using WatchList.WebUI.Services.RoleServices;
 using WatchList.WebUI.Services.UserServices;
 using WatchList.WebUI.Validators;
 
@@ -13,7 +16,9 @@ namespace WatchList.WebUI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
             builder.Services.AddDbContext<WatchListContext>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
