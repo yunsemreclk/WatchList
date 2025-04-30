@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WatchList.DataAccess.Context;
 using WatchList.Entity.Entities;
 using WatchList.WebUI.Services.UserServices;
+using WatchList.WebUI.Validators;
 
 namespace WatchList.WebUI
 {
@@ -17,7 +18,7 @@ namespace WatchList.WebUI
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
             });
-            builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<WatchListContext>();
+            builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<WatchListContext>().AddErrorDescriber<CustomErrorDescriber>();
             builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews();
             builder.Services.AddAuthorization();
