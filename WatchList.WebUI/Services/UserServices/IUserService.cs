@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.UserDtos;
 
 namespace WatchList.WebUI.Services.UserServices
@@ -13,6 +14,9 @@ namespace WatchList.WebUI.Services.UserServices
 
         Task<bool> CreateRoleAsync(UserRoleDto userRoleDto);
 
-        Task<bool> AssignRoleAsync(AssignRoleDto assignRoleDto);
+        Task<bool> AssignRoleAsync(List<AssignRoleDto> assignRoleDto);
+
+        Task<List<AppUser>> GetAppUsersAsync();
+        Task<AppUser> GetUserByIdAsync(int id);
     }
 }
