@@ -25,8 +25,14 @@ namespace WatchList.WebUI
             });
             builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<WatchListContext>().AddErrorDescriber<CustomErrorDescriber>();
             builder.Services.AddHttpClient();
+
+            builder.Services.ConfigureApplicationCookie(cfg =>
+            {
+                cfg.LoginPath = "/Login/SignIn";
+                cfg.LogoutPath = "/Login/SignOut";
+            });
             builder.Services.AddControllersWithViews();
-            builder.Services.AddAuthorization();
+
 
             var app = builder.Build();
 
@@ -44,7 +50,7 @@ namespace WatchList.WebUI
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

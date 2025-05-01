@@ -30,7 +30,13 @@ namespace WatchList.WebUI.Services.UserServices
             {
                 return new IdentityResult();
             }
-            return await userManager.CreateAsync(user, userRegisterDto.Password);
+            var result = await userManager.CreateAsync(user, userRegisterDto.Password);
+            if (result.Succeeded) 
+            {
+                await userManager.AddToRoleAsync(user, "User");
+                return result;
+            }
+            return result;
 
         }
 

@@ -5,7 +5,7 @@ using WatchList.WebUI.Services.UserServices;
 
 namespace WatchList.WebUI.Controllers
 {
-    public class LoginController(UserService userService) : Controller
+    public class LoginController(IUserService userService) : Controller
     {
         public IActionResult SignIn()
         {

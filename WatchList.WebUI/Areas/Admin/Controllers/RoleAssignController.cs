@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WatchList.Entity.Entities;
@@ -7,6 +8,7 @@ using WatchList.WebUI.Services.UserServices;
 
 namespace WatchList.WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     [Route("[area]/[controller]/[action]/{id?}")]
     public class RoleAssignController(IUserService userService, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager) : Controller
