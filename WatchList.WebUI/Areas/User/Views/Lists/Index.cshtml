@@ -1,0 +1,307 @@
+﻿@model WatchList.WebUI.Controllers.ListsPageViewModel
+@{
+    ViewData["Title"] = "Listelerim";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container py-5">
+    <!-- Başlık ve Yeni Liste Oluşturma -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-collection-play fs-2 me-2 text-primary"></i>
+            <h1 class="mb-0 fw-bold">Listelerim</h1>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle rounded-pill px-4 py-2 shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-plus-circle me-1"></i> Yeni Liste Oluştur
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2">
+                <li>
+                    <a class="dropdown-item py-2 px-3" asp-controller="MovieList" asp-action="Create">
+                        <i class="bi bi-film text-danger me-2"></i> Film Listesi
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                    <a class="dropdown-item py-2 px-3" asp-controller="SeriesList" asp-action="Create">
+                        <i class="bi bi-tv text-success me-2"></i> Dizi Listesi
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                    <a class="dropdown-item py-2 px-3" asp-controller="TierList" asp-action="Create">
+                        <i class="bi bi-trophy text-warning me-2"></i> Tier Listesi
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Liste Kategorileri için Tablar -->
+    <ul class="nav nav-tabs mb-4" id="listTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="movie-tab" data-bs-toggle="tab" data-bs-target="#movie-lists" type="button" role="tab" aria-selected="true">
+                <i class="bi bi-film me-1"></i> Film Listeleri
+                <span class="badge rounded-pill bg-light text-dark ms-1">@Model.MovieLists.Count()</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="series-tab" data-bs-toggle="tab" data-bs-target="#series-lists" type="button" role="tab" aria-selected="false">
+                <i class="bi bi-tv me-1"></i> Dizi Listeleri
+                <span class="badge rounded-pill bg-light text-dark ms-1">@Model.SeriesLists.Count()</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tier-tab" data-bs-toggle="tab" data-bs-target="#tier-lists" type="button" role="tab" aria-selected="false">
+                <i class="bi bi-trophy me-1"></i> Tier Listeleri
+                <span class="badge rounded-pill bg-light text-dark ms-1">@Model.TierLists.Count()</span>
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab İçerikleri -->
+    <div class="tab-content" id="listTabsContent">
+        <!-- Film Listeleri -->
+        <div class="tab-pane fade show active" id="movie-lists" role="tabpanel" aria-labelledby="movie-tab">
+            @if (!Model.MovieLists.Any())
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="bi bi-film text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="text-muted">Henüz film listesi oluşturmadınız</h5>
+                    <p class="mb-4">Favori filmlerinizi listelemek için bir film listesi oluşturun.</p>
+                    <a asp-controller="MovieList" asp-action="Create" class="btn btn-outline-primary rounded-pill">
+                        <i class="bi bi-plus-circle me-1"></i> Film Listesi Oluştur
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var list in Model.MovieLists)
+                    {
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                                <div class="card-body position-relative">
+                                    <div class="list-badge film-badge">
+                                        <i class="bi bi-film"></i>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="card-title mb-3 fw-bold text-truncate pe-3">@list.Title</h5>
+                                        <span class="visibility-badge @(list.IsShared ? "bg-success" : "bg-secondary")">
+                                            <i class="bi @(list.IsShared ? "bi-unlock" : "bi-lock")"></i>
+                                        </span>
+                                    </div>
+                                    <p class="card-text text-muted mb-3">
+                                        <small>
+                                            <i class="bi bi-calendar3 me-1"></i> @list.CreatedDate.ToShortDateString()
+                                        </small>
+                                    </p>
+                                    <div class="d-flex gap-2 mt-4">
+                                        <a href="#" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                            <i class="bi bi-eye me-1"></i> Görüntüle
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                                            <i class="bi bi-pencil me-1"></i> Düzenle
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Dizi Listeleri -->
+        <div class="tab-pane fade" id="series-lists" role="tabpanel" aria-labelledby="series-tab">
+            @if (!Model.SeriesLists.Any())
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="bi bi-tv text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="text-muted">Henüz dizi listesi oluşturmadınız</h5>
+                    <p class="mb-4">Favori dizilerinizi listelemek için bir dizi listesi oluşturun.</p>
+                    <a asp-controller="SeriesList" asp-action="Create" class="btn btn-outline-success rounded-pill">
+                        <i class="bi bi-plus-circle me-1"></i> Dizi Listesi Oluştur
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var list in Model.SeriesLists)
+                    {
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                                <div class="card-body position-relative">
+                                    <div class="list-badge series-badge">
+                                        <i class="bi bi-tv"></i>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="card-title mb-3 fw-bold text-truncate pe-3">@list.Title</h5>
+                                        <span class="visibility-badge @(list.IsShared ? "bg-success" : "bg-secondary")">
+                                            <i class="bi @(list.IsShared ? "bi-unlock" : "bi-lock")"></i>
+                                        </span>
+                                    </div>
+                                    <p class="card-text text-muted mb-3">
+                                        <small>
+                                            <i class="bi bi-calendar3 me-1"></i> @list.CreatedDate.ToShortDateString()
+                                        </small>
+                                    </p>
+                                    <div class="d-flex gap-2 mt-4">
+                                        <a href="#" class="btn btn-sm btn-outline-success flex-grow-1">
+                                            <i class="bi bi-eye me-1"></i> Görüntüle
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                                            <i class="bi bi-pencil me-1"></i> Düzenle
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- Tier Listeleri -->
+        <div class="tab-pane fade" id="tier-lists" role="tabpanel" aria-labelledby="tier-tab">
+            @if (!Model.TierLists.Any())
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="bi bi-trophy text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="text-muted">Henüz tier listesi oluşturmadınız</h5>
+                    <p class="mb-4">Favori içeriklerinizi sıralamak için bir tier listesi oluşturun.</p>
+                    <a asp-controller="TierList" asp-action="Create" class="btn btn-outline-warning rounded-pill">
+                        <i class="bi bi-plus-circle me-1"></i> Tier Listesi Oluştur
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var list in Model.TierLists)
+                    {
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                                <div class="card-body position-relative">
+                                    <div class="list-badge tier-badge">
+                                        <i class="bi bi-trophy"></i>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <h5 class="card-title mb-3 fw-bold text-truncate pe-3">@list.Title</h5>
+                                        <span class="visibility-badge @(list.IsShared ? "bg-success" : "bg-secondary")">
+                                            <i class="bi @(list.IsShared ? "bi-unlock" : "bi-lock")"></i>
+                                        </span>
+                                    </div>
+                                    <p class="card-text text-muted mb-3">
+                                        <small>
+                                            <i class="bi bi-calendar3 me-1"></i> @list.CreatedDate.ToShortDateString()
+                                        </small>
+                                    </p>
+                                    <div class="d-flex gap-2 mt-4">
+                                        <a href="#" class="btn btn-sm btn-outline-warning flex-grow-1">
+                                            <i class="bi bi-eye me-1"></i> Görüntüle
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                                            <i class="bi bi-pencil me-1"></i> Düzenle
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Genel Stil Ayarları */
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+
+        .hover-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+        }
+
+    /* Liste Rozet Stilleri */
+    .list-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .film-badge {
+        background: linear-gradient(135deg, #f5505e, #ef1f36);
+    }
+
+    .series-badge {
+        background: linear-gradient(135deg, #36d39a, #12a86d);
+    }
+
+    .tier-badge {
+        background: linear-gradient(135deg, #ffc107, #ff9800);
+    }
+
+    /* Görünürlük Rozet Stilleri */
+    .visibility-badge {
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+    }
+
+    /* Tab Stilleri */
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.75rem 1rem;
+    }
+
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            background-color: transparent;
+            border-bottom: 2px solid #0d6efd;
+        }
+
+    /* Kart Stilleri */
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Boş Durum Stil Ayarları */
+    .text-muted i.bi {
+        opacity: 0.5;
+    }
+</style>

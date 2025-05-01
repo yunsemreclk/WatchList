@@ -1,0 +1,89 @@
+﻿@model IEnumerable<WatchList.WebUI.DTOs.SeriesDtos.ListSeriesDto>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h1 class="mb-0">🎬 Dizilerim</h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Yeni Dizi Ekle
+        </a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-8 mb-2 mb-lg-0">
+            <div class="input-group">
+                <input type="text" id="seriesSearch" class="form-control" placeholder="Dizi ara...">
+                <button class="btn btn-outline-secondary" type="button">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="btn-group w-100">
+                <a asp-action="Index" class="btn btn-outline-primary">Tümü</a>
+                <a asp-action="Watched" class="btn btn-outline-success">İzlenenler</a>
+                <a asp-action="Unwatched" class="btn btn-outline-warning">İzlenmeyenler</a>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            <h4>Henüz dizi eklenmemiş</h4>
+            <p>Dizi eklemek için <strong>Yeni Dizi Ekle</strong> butonunu kullanabilirsiniz.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4" id="seriesGrid">
+            @foreach (var series in Model)
+            {
+                <div class="col series-item">
+                    <div class="card h-100 shadow-sm border-0">
+                        @if (!string.IsNullOrEmpty(series.PosterUrl))
+                        {
+                            <img src="@series.PosterUrl" class="card-img-top" alt="@series.Title" style="height: 300px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 300px;">
+                                <i class="bi bi-film" style="font-size: 3rem; color: #888;"></i>
+                            </div>
+                        }
+
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate" title="@series.Title">@series.Title</h5>
+                            <p class="card-text">
+                                <small class="text-muted">@series.Title</small>
+                            </p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@series.Id" class="btn btn-outline-secondary" title="Detaylar">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@series.Id" class="btn btn-outline-primary" title="Düzenle">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </div>
+                                <form asp-action="Deleteseries" asp-controller="series" asp-route-id="@series.Id"
+                                      onsubmit="return confirm('Bu diziyi silmek istediğinize emin misiniz?');"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Sil">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+

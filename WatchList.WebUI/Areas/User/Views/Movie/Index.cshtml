@@ -1,18 +1,19 @@
 ﻿@model IEnumerable<WatchList.WebUI.DTOs.MovieDtos.ListMovieDto>
 @{
     ViewData["Title"] = "Filmlerim";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
 <div class="container my-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Filmlerim</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h1 class="mb-0">🎬 Filmlerim</h1>
         <a asp-action="Create" class="btn btn-primary">
-            <i class="bi bi-plus"></i> Yeni Film Ekle
+            <i class="bi bi-plus-lg me-1"></i> Yeni Film Ekle
         </a>
     </div>
 
     <div class="row mb-4">
-        <div class="col-md-8">
+        <div class="col-lg-8 mb-2 mb-lg-0">
             <div class="input-group">
                 <input type="text" id="movieSearch" class="form-control" placeholder="Film ara...">
                 <button class="btn btn-outline-secondary" type="button">
@@ -20,8 +21,8 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="btn-group float-end">
+        <div class="col-lg-4">
+            <div class="btn-group w-100">
                 <a asp-action="Index" class="btn btn-outline-primary">Tümü</a>
                 <a asp-action="Watched" class="btn btn-outline-success">İzlenenler</a>
                 <a asp-action="Unwatched" class="btn btn-outline-warning">İzlenmeyenler</a>
@@ -33,7 +34,7 @@
     {
         <div class="alert alert-info text-center">
             <h4>Henüz film eklenmemiş</h4>
-            <p>Film eklemek için "Yeni Film Ekle" butonuna tıklayabilirsiniz.</p>
+            <p>Film eklemek için <strong>Yeni Film Ekle</strong> butonunu kullanabilirsiniz.</p>
         </div>
     }
     else
@@ -42,41 +43,41 @@
             @foreach (var movie in Model)
             {
                 <div class="col movie-item">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm border-0">
                         @if (!string.IsNullOrEmpty(movie.PosterUrl))
                         {
-                            <img src="@movie.PosterUrl" class="card-img-top" alt="@movie.Title">
+                            <img src="@movie.PosterUrl" class="card-img-top" alt="@movie.Title" style="height: 300px; object-fit: cover;">
                         }
                         else
                         {
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
-                                <i class="bi bi-film" style="font-size: 3rem;"></i>
+                            <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 300px;">
+                                <i class="bi bi-film" style="font-size: 3rem; color: #888;"></i>
                             </div>
                         }
+
                         <div class="card-body">
-                            <h5 class="card-title">@movie.Title</h5>
+                            <h5 class="card-title text-truncate" title="@movie.Title">@movie.Title</h5>
                             <p class="card-text">
                                 <small class="text-muted">@movie.ReleaseYear</small>
                             </p>
                         </div>
-                        <div class="card-footer bg-transparent border-top-0">
+                        <div class="card-footer bg-white border-top-0">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-secondary">
+                                <div class="btn-group btn-group-sm">
+                                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-outline-secondary" title="Detaylar">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-primary">
+                                    <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-outline-primary" title="Düzenle">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                 </div>
                                 <form asp-action="DeleteMovie" asp-controller="Movie" asp-route-id="@movie.Id"
                                       onsubmit="return confirm('Bu filmi silmek istediğinize emin misiniz?');"
                                       class="d-inline">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Sil">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </form>
-                                
                             </div>
                         </div>
                     </div>
@@ -85,25 +86,3 @@
         </div>
     }
 </div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            $("#movieSearch").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $(".movie-item").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-    </script>
-}
-
-
-
-
-
-
-
-
-

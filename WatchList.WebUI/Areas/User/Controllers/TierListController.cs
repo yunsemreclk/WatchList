@@ -2,7 +2,8 @@
 
 namespace WatchList.WebUI.Controllers
 {
-    public class MovieListController : Controller
+    [Area("User")]
+    public class TierListController : Controller
     {
         public IActionResult Index()
         {

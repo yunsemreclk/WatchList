@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WatchList.WebUI.Controllers
+namespace WatchList.WebUI.Areas.User.Controllers
 {
-    public class TierListController : Controller
+    public class ExploreController : Controller
     {
+        [Area("User")]
         public IActionResult Index()
         {
             return View();

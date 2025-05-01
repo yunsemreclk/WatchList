@@ -4,6 +4,7 @@ using WatchList.WebUI.Models;
 
 namespace WatchList.WebUI.Controllers
 {
+    [Area("User")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

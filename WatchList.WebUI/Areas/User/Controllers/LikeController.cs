@@ -2,7 +2,8 @@
 
 namespace WatchList.WebUI.Controllers
 {
-    public class SeriesController : Controller
+    [Area("User")]
+    public class LikeController : Controller
     {
         public IActionResult Index()
         {

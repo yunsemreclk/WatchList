@@ -1,0 +1,41 @@
+﻿@model WatchList.WebUI.DTOs.SeriesDtos.CreateSeriesDto
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="row">
+<div class="col-md-8">
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Dizi Başlığı</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+
+
+
+
+        <div class="mb-3">
+            <label asp-for="PosterUrl" class="form-label">Poster URL</label>
+            <input asp-for="PosterUrl" class="form-control" />
+            <span asp-validation-for="PosterUrl" class="text-danger"></span>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-success">Kaydet</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </form>
+</div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
+

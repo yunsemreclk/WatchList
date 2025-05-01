@@ -2,7 +2,8 @@
 
 namespace WatchList.WebUI.Controllers
 {
-    public class LikeController : Controller
+    [Area("User")]
+    public class MovieListController : Controller
     {
         public IActionResult Index()
         {
