@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using WatchList.WebUI.DTOs.UserDtos;
 using WatchList.WebUI.Services.UserServices;
@@ -27,6 +29,12 @@ namespace WatchList.WebUI.Controllers
             }
             ModelState.AddModelError("", "Email yada Şifre Hatalı.");
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SignOut()
+        {
+            await userService.LogoutAsync();
+            return RedirectToAction("SignIn", "Login");
         }
     }
 }

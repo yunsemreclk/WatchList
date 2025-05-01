@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WatchList.WebUI.Models;
 
-namespace WatchList.WebUI.Controllers
+namespace WatchList.WebUI.Areas.User.Controllers
 {
+    [Authorize(Roles = "User")]
     [Area("User")]
     public class HomeController : Controller
     {

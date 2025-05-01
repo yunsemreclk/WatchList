@@ -53,6 +53,14 @@ namespace WatchList.API.Controllers
             return Ok(values);
         }
 
+        [HttpGet("GetSeriesListByUserId/{id}")]
+        public IActionResult GetMovieListByUserId(int id)
+        {
+            var values = _seriesListService.TGetFilteredList(x => x.AppUserId == id);
+            var mappedValues = _mapper.Map<List<ListSeriesListDto>>(values);
+            return Ok(mappedValues);
+        }
+
     }
 
     [Route("api/[controller]")]

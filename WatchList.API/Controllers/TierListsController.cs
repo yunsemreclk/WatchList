@@ -53,6 +53,14 @@ namespace WatchList.API.Controllers
             var values = _tierListService.TGetFilteredList(x => x.IsShared == true);
             return Ok(values);
         }
+
+        [HttpGet("GetTierListByUserId/{id}")]
+        public IActionResult GetMovieListByUserId(int id)
+        {
+            var values = _tierListService.TGetFilteredList(x => x.AppUserId == id);
+            var mappedValues = _mapper.Map<List<ListTierListDto>>(values);
+            return Ok(mappedValues);
+        }
     }
 
     [Route("api/[controller]")]

@@ -16,6 +16,8 @@ namespace WatchList.DTO.DTOs.TierListDtos
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        public int AppUserId { get; set; }
+
     }
     public class ListTierListItemDto
     {

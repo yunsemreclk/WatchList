@@ -15,6 +15,8 @@ namespace WatchList.DTO.DTOs.MovieDtos
         public string PosterUrl { get; set; }
         public bool IsShared { get; set; }
 
+        public int AppUserId { get; set; }
+
 
 
     }

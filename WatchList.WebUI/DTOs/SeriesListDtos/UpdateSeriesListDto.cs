@@ -14,6 +14,8 @@ namespace WatchList.WebUI.DTOs.SeriesListDtos
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         public ICollection<int> SeriesIds { get; set; }
+
+        public int AppUserId { get; set; }
     }
 
     public class UpdateSeriesListItemDto

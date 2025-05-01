@@ -13,5 +13,7 @@ namespace WatchList.WebUI.DTOs.LikeDtos
         public int TargetId { get; set; }
 
         public DateTime LikedDate { get; set; } = DateTime.UtcNow;
+
+        public int AppUserId { get; set; }
     }
 }

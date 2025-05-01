@@ -73,9 +73,10 @@ namespace WatchList.WebUI.Services.UserServices
             
         }
 
-        public Task<bool> LogoutAsync()
+        public async Task<bool> LogoutAsync()
         {
-            throw new NotImplementedException();
+            await signInManager.SignOutAsync();
+            return true;
         }
     }
 }

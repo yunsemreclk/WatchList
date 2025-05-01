@@ -15,6 +15,8 @@ namespace WatchList.DTO.DTOs.MovieListDtos
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         public ICollection<int> MovieIds { get; set; } // Sadece MovieId'leri tutuyoruz
+
+        public int AppUserId { get; set; }
     }
 
     public class UpdateMovieListItemDto

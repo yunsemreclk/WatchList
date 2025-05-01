@@ -46,5 +46,13 @@ namespace WatchList.API.Controllers
             return Ok("Güncellendi");
         }
 
+        [HttpGet("GetMovieByUserId/{id}")]
+        public IActionResult GetMovieListByUserId(int id)
+        {
+            var values = _movieService.TGetFilteredList(x => x.AppUserId == id);
+            var mappedValues = _mapper.Map<List<ListMovieDto>>(values);
+            return Ok(mappedValues);
+        }
+
     }
 }

@@ -1,72 +1,54 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WatchList</title>
+
+    <!-- Styles -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+    <!-- Navbar -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand fw-bold" href="/User">
                     <i class="bi bi-film me-2"></i>WatchList
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Menüyü Aç">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- Keşfet -->
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Explore">Keşfet</a>
+                            <a class="nav-link" asp-area="User" asp-controller="Explore" asp-action="Index">Keşfet</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                Filmler
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-controller="Movie" asp-action="Index">Tüm Filmlerim</a></li>
-                                <li><a class="dropdown-item" asp-controller="Movie" asp-action="Watched">İzlediğim Filmler</a></li>
-                                <li><a class="dropdown-item" asp-controller="Movie" asp-action="Unwatched">İzlemediğim Filmler</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Movie" asp-action="Create">Yeni Film Ekle</a></li>
-                            </ul>
+                        <!-- Filmler -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Movie" asp-action="Index">Filmler</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="seriesDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                Diziler
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="seriesDropdown">
-                                <li><a class="dropdown-item" asp-controller="Series" asp-action="Index">Tüm Dizilerim</a></li>
-                                <li><a class="dropdown-item" asp-controller="Series" asp-action="Watching">İzlediğim Diziler</a></li>
-                                <li><a class="dropdown-item" asp-controller="Series" asp-action="Finished">Bitirdiğim Diziler</a></li>
-                                <li><a class="dropdown-item" asp-controller="Series" asp-action="Planned">İzlemeyi Planladığım</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Series" asp-action="Create">Yeni Dizi Ekle</a></li>
-                            </ul>
+
+                        <!-- Diziler -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Series" asp-action="Index">Diziler</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="listsDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                Listelerim
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="listsDropdown">
-                                <li><a class="dropdown-item" asp-controller="MovieList" asp-action="Index">Film Listelerim</a></li>
-                                <li><a class="dropdown-item" asp-controller="SeriesList" asp-action="Index">Dizi Listelerim</a></li>
-                                <li><a class="dropdown-item" asp-controller="TierList" asp-action="Index">Tier Listelerim</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="MovieList" asp-action="Create">Yeni Film Listesi</a></li>
-                                <li><a class="dropdown-item" asp-controller="SeriesList" asp-action="Create">Yeni Dizi Listesi</a></li>
-                                <li><a class="dropdown-item" asp-controller="TierList" asp-action="Create">Yeni Tier Listesi</a></li>
-                            </ul>
+                        <!-- Listelerim -->
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Lists" asp-action="Index">Listelerim</a>
                         </li>
+
                     </ul>
+
+                    <!-- Kullanıcı Menüsü -->
                     <ul class="navbar-nav ms-auto">
                         @if (!User.Identity.IsAuthenticated)
                         {
@@ -89,7 +71,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <form asp-controller="Login" asp-action="Logout" method="post" class="d-inline">
+                                <form asp-controller="Login" asp-action="SignOut" method="post" class="d-inline">
                                     <button type="submit" class="nav-link btn btn-link text-white p-0 m-0">
                                         <i class="bi bi-box-arrow-right me-1"></i>Çıkış Yap
                                     </button>
@@ -97,23 +79,24 @@
                             </li>
                         }
                     </ul>
-
-
                 </div>
             </div>
         </nav>
     </header>
 
-    <main role="main">
+    <!-- İçerik -->
+    <main role="main" class="container py-4">
         @RenderBody()
     </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center py-3">
-            &copy; @DateTime.Now.Year - WatchList - Film ve Dizi İzleme
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-light border-top">
+        <div class="container text-center text-muted small">
+            &copy; @DateTime.Now.Year - WatchList | Film ve Dizi Takip Uygulaması
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

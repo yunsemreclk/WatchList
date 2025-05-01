@@ -1,21 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.MovieListDtos;
 using WatchList.WebUI.DTOs.SeriesListDtos;
 using WatchList.WebUI.DTOs.TierListDtos;
 using WatchList.WebUI.Helpers;
 
-namespace WatchList.WebUI.Controllers
+namespace WatchList.WebUI.Areas.User.Controllers
 {
+    [Authorize(Roles = "User")]
     [Area("User")]
     public class ListsController : Controller
     {
         private readonly HttpClient _client = HttpClientInstance.CreateClient();
+        private readonly UserManager<AppUser> _userManager;
+
+        public ListsController(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+        }
+
 
         public async Task<IActionResult> Index()
         {
-            var movieLists = await _client.GetFromJsonAsync<List<ListMovieListDto>>("movielists");
-            var seriesLists = await _client.GetFromJsonAsync<List<ListSeriesListDto>>("serieslists");
-            var tierLists = await _client.GetFromJsonAsync<List<ListTierListDto>>("tierlists");
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var movieLists = await _client.GetFromJsonAsync<List<ListMovieListDto>>("movielists/GetMovieListByUserId/" + user.Id);
+            var seriesLists = await _client.GetFromJsonAsync<List<ListSeriesListDto>>("serieslists/GetSeriesListByUserId/" + user.Id);
+            var tierLists = await _client.GetFromJsonAsync<List<ListTierListDto>>("tierlists/GetTierListByUserId/" + user.Id);
 
             var viewModel = new ListsPageViewModel
             {
@@ -26,7 +39,9 @@ namespace WatchList.WebUI.Controllers
 
             return View(viewModel);
         }
+
     }
+
 
     public class ListsPageViewModel
     {
@@ -35,3 +50,6 @@ namespace WatchList.WebUI.Controllers
         public List<ListTierListDto> TierLists { get; set; }
     }
 }
+
+
+

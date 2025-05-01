@@ -23,6 +23,8 @@ namespace WatchList.DTO.DTOs.SeriesDtos
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        public int AppUserId { get; set; }
+
 
 
     }
