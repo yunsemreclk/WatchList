@@ -22,7 +22,7 @@ namespace WatchList.WebUI.Controllers
             }
             if (userRole == "User")
             {
-                return RedirectToAction("Index", "Home"); // , new { area = "User" }
+                return RedirectToAction("Index", "Home", new { area = "User" }); 
 
             }
             ModelState.AddModelError("", "Email yada Şifre Hatalı.");

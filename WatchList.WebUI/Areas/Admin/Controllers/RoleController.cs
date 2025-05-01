@@ -10,9 +10,9 @@ using WatchList.WebUI.Services.RoleServices;
 
 namespace WatchList.WebUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+
+    [Authorize(Roles = "User")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class RoleController(IRoleService roleService) : Controller
     {
         public async Task<IActionResult> Index()

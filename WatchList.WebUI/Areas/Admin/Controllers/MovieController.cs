@@ -5,9 +5,10 @@ using WatchList.WebUI.Helpers;
 
 namespace WatchList.WebUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles ="Admin")]
+
+
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
-    [Route("[area]/[controller]/[action]/{id?}")]
     public class MovieController : Controller
     {
         private readonly HttpClient _client = HttpClientInstance.CreateClient();

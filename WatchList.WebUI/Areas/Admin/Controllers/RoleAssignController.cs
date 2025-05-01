@@ -8,7 +8,7 @@ using WatchList.WebUI.Services.UserServices;
 
 namespace WatchList.WebUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles ="Admin")]
     [Area("Admin")]
     [Route("[area]/[controller]/[action]/{id?}")]
     public class RoleAssignController(IUserService userService, UserManager<AppUser> userManager, RoleManager<AppRole> roleManager) : Controller

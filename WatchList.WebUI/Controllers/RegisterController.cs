@@ -22,7 +22,7 @@ namespace WatchList.WebUI.Controllers
                 }
                 return View();
             }
-            return RedirectToAction("Login", "SignIn");
+            return RedirectToAction("SignIn", "Login");
         }
         
     }
