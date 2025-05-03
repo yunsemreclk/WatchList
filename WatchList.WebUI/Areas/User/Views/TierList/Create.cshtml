@@ -1,6 +1,6 @@
-﻿@model WatchList.WebUI.DTOs.SeriesListDtos.CreateSeriesListDto
+﻿@model WatchList.WebUI.DTOs.TierListDtos.CreateTierListDto
 @{
-    ViewData["Title"] = "Create Series List";
+    ViewData["Title"] = "Create Tier List";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
@@ -12,7 +12,7 @@
             <span asp-validation-for="Title" class="text-danger"></span>
 
             <div class="mb-3">
-                <label asp-for="Title" class="form-label">Dizi Listesi Başlığı</label>
+                <label asp-for="Title" class="form-label">Tier List Başlığı</label>
                 <input type="text" asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
@@ -31,4 +31,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

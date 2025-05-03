@@ -50,7 +50,8 @@ namespace WatchList.API.Controllers
         public IActionResult GetSharedSeriesList(int id)
         {
             var values = _seriesListService.TGetFilteredList(x => x.IsShared == true);
-            return Ok(values);
+            var mappedValues = _mapper.Map<List<ListSeriesListDto>>(values);
+            return Ok(mappedValues);
         }
 
         [HttpGet("GetSeriesListByUserId/{id}")]

@@ -1,570 +1,215 @@
-﻿@model WatchList.WebUI.Areas.User.Controllers.ListsPageViewModel
+﻿@model WatchList.WebUI.Areas.User.Controllers.ExplorePageViewModel
 @{
     ViewData["Title"] = "Keşfet";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
-<div class="container py-5">
-    <!-- Başlık ve Filtreler -->
+<<div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <div class="d-flex align-items-center">
-            <i class="bi bi-compass fs-2 me-2 text-primary"></i>
-            <h1 class="mb-0 fw-bold">Keşfet</h1>
-        </div>
+        <h2 class="fw-bold m-0">
+            <i class="bi bi-stars text-warning me-2"></i> Keşfet
+        </h2>
 
-        <div class="d-flex gap-2 flex-wrap">
-            <!-- Arama Kutusu -->
-            <div class="input-group" style="width: auto;">
-                <input type="text" class="form-control rounded-pill-start" placeholder="Liste ara..." aria-label="Liste ara">
-                <button class="btn btn-outline-primary rounded-pill-end" type="button">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-
-            <!-- Filtre Dropdown -->
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle rounded-pill px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-funnel me-1"></i> Filtrele
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                    <li><h6 class="dropdown-header">Liste Türü</h6></li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="filter-movies" checked>
-                                <label class="form-check-label" for="filter-movies">
-                                    <i class="bi bi-film text-danger me-1"></i> Film Listeleri
-                                </label>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="filter-series" checked>
-                                <label class="form-check-label" for="filter-series">
-                                    <i class="bi bi-tv text-success me-1"></i> Dizi Listeleri
-                                </label>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="filter-tiers" checked>
-                                <label class="form-check-label" for="filter-tiers">
-                                    <i class="bi bi-trophy text-warning me-1"></i> Tier Listeleri
-                                </label>
-                            </div>
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><h6 class="dropdown-header">Sıralama</h6></li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sortOrder" id="sort-newest" checked>
-                                <label class="form-check-label" for="sort-newest">
-                                    En Yeni
-                                </label>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sortOrder" id="sort-popular">
-                                <label class="form-check-label" for="sort-popular">
-                                    En Popüler
-                                </label>
-                            </div>
-                        </a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <div class="px-3 py-2">
-                            <button class="btn btn-primary btn-sm w-100">Uygula</button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Sıralama Dropdown -->
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle rounded-pill px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-arrow-down-up me-1"></i> Sırala
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-calendar-minus me-2"></i> En Yeni
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-calendar-plus me-2"></i> En Eski
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bi bi-heart me-2"></i> En Çok Beğenilen
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <div class="input-group w-auto">
+            <input type="text" class="form-control rounded-start-pill" placeholder="Liste ara..." />
+            <button class="btn btn-outline-secondary rounded-end-pill">
+                <i class="bi bi-search"></i>
+            </button>
         </div>
     </div>
 
-    <!-- İçerik Açıklaması -->
-    <p class="text-muted mb-4">
-        Diğer kullanıcılar tarafından paylaşılan açık listeleri keşfedin. İlginizi çeken film, dizi ve tier listelerini inceleyebilirsiniz.
-    </p>
+    <div class="btn-group mb-4">
+        <button class="btn btn-outline-primary active" onclick="filterLists('movie')">Filmler</button>
+        <button class="btn btn-outline-primary" onclick="filterLists('series')">Diziler</button>
+        <button class="btn btn-outline-primary" onclick="filterLists('tier')">Tier List</button>
+    </div>
 
-    <!-- Trend Listeler (Kaydırılabilir) -->
-    <section class="mb-5">
-        <h2 class="mb-3 d-flex align-items-center">
-            <i class="bi bi-fire text-danger me-2"></i> Trend Listeler
-        </h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="listsContainer">
 
-        <div class="position-relative">
-            <div class="scroll-controls">
-                <button class="btn btn-light rounded-circle shadow-sm scroll-btn scroll-left">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <button class="btn btn-light rounded-circle shadow-sm scroll-btn scroll-right">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
-            </div>
-
-            <div class="scrolling-wrapper pb-2">
-                <!-- Trend Liste 1 -->
-                <div class="card trending-card border-0 shadow-sm">
-                    <div class="card-img-top trending-card-image bg-light position-relative">
-                        <div class="list-type-badge film-badge">
-                            <i class="bi bi-film"></i>
+        @foreach (var list in Model.MovieLists)
+        {
+            <div class="col list-item movie">
+                <div class="card border-0 shadow-sm h-100 rounded-4 hover-scale">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-danger-subtle text-danger">
+                                <i class="bi bi-film me-1"></i> Film Listesi
+                            </span>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar2 me-1"></i> @list.CreatedDate.ToShortDateString()
+                            </small>
                         </div>
-                        <div class="trending-overlay">
-                            <div class="trending-stats">
-                                <span><i class="bi bi-heart-fill me-1"></i> 245</span>
-                                <span><i class="bi bi-eye-fill me-1"></i> 1.2K</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title mb-1">2020'nin En İyi Bilim Kurgu Filmleri</h6>
-                        <p class="card-text small text-muted mb-0">
-                            <i class="bi bi-person me-1"></i> Ahmet Y.
+                        <h5 class="fw-bold text-truncate">@list.Title</h5>
+                        <p class="text-muted small">
+                            <i class="bi bi-person-circle me-1"></i>
+                            @(Model.UserNameDictionary.ContainsKey(list.AppUserId) ? Model.UserNameDictionary[list.AppUserId] : "Bilinmeyen")
                         </p>
-                    </div>
-                </div>
-
-                <!-- Trend Liste 2 -->
-                <div class="card trending-card border-0 shadow-sm">
-                    <div class="card-img-top trending-card-image bg-light position-relative">
-                        <div class="list-type-badge series-badge">
-                            <i class="bi bi-tv"></i>
-                        </div>
-                        <div class="trending-overlay">
-                            <div class="trending-stats">
-                                <span><i class="bi bi-heart-fill me-1"></i> 189</span>
-                                <span><i class="bi bi-eye-fill me-1"></i> 843</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title mb-1">Mutlaka İzlenmesi Gereken Kore Dizileri</h6>
-                        <p class="card-text small text-muted mb-0">
-                            <i class="bi bi-person me-1"></i> Zeynep K.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Trend Liste 3 -->
-                <div class="card trending-card border-0 shadow-sm">
-                    <div class="card-img-top trending-card-image bg-light position-relative">
-                        <div class="list-type-badge tier-badge">
-                            <i class="bi bi-trophy"></i>
-                        </div>
-                        <div class="trending-overlay">
-                            <div class="trending-stats">
-                                <span><i class="bi bi-heart-fill me-1"></i> 312</span>
-                                <span><i class="bi bi-eye-fill me-1"></i> 1.5K</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title mb-1">Tarantino Filmleri Tier Listesi</h6>
-                        <p class="card-text small text-muted mb-0">
-                            <i class="bi bi-person me-1"></i> Mert C.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Trend Liste 4 -->
-                <div class="card trending-card border-0 shadow-sm">
-                    <div class="card-img-top trending-card-image bg-light position-relative">
-                        <div class="list-type-badge film-badge">
-                            <i class="bi bi-film"></i>
-                        </div>
-                        <div class="trending-overlay">
-                            <div class="trending-stats">
-                                <span><i class="bi bi-heart-fill me-1"></i> 178</span>
-                                <span><i class="bi bi-eye-fill me-1"></i> 920</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title mb-1">90'ların Kült Komedi Filmleri</h6>
-                        <p class="card-text small text-muted mb-0">
-                            <i class="bi bi-person me-1"></i> Canan B.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Trend Liste 5 -->
-                <div class="card trending-card border-0 shadow-sm">
-                    <div class="card-img-top trending-card-image bg-light position-relative">
-                        <div class="list-type-badge series-badge">
-                            <i class="bi bi-tv"></i>
-                        </div>
-                        <div class="trending-overlay">
-                            <div class="trending-stats">
-                                <span><i class="bi bi-heart-fill me-1"></i> 203</span>
-                                <span><i class="bi bi-eye-fill me-1"></i> 1.1K</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h6 class="card-title mb-1">Tüm Zamanların En İyi Fantastik Dizileri</h6>
-                        <p class="card-text small text-muted mb-0">
-                            <i class="bi bi-person me-1"></i> Deniz A.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Kategori Sekmeleri -->
-    <ul class="nav nav-pills mb-4" id="discoverTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-lists" type="button" role="tab" aria-selected="true">
-                <i class="bi bi-collection me-1"></i> Tümü
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="discover-movie-tab" data-bs-toggle="tab" data-bs-target="#discover-movie-lists" type="button" role="tab" aria-selected="false">
-                <i class="bi bi-film me-1"></i> Film Listeleri
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="discover-series-tab" data-bs-toggle="tab" data-bs-target="#discover-series-lists" type="button" role="tab" aria-selected="false">
-                <i class="bi bi-tv me-1"></i> Dizi Listeleri
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="discover-tier-tab" data-bs-toggle="tab" data-bs-target="#discover-tier-lists" type="button" role="tab" aria-selected="false">
-                <i class="bi bi-trophy me-1"></i> Tier Listeleri
-            </button>
-        </li>
-    </ul>
-
-    <!-- Tab İçerikleri -->
-    <div class="tab-content" id="discoverTabsContent">
-        <!-- Tüm Listeler -->
-        <div class="tab-pane fade show active" id="all-lists" role="tabpanel" aria-labelledby="all-tab">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <!-- Film Listesi Örneği -->
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm discover-card">
-                        <div class="card-body p-0">
-                            <div class="discover-card-header position-relative p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <span class="badge bg-danger rounded-pill mb-2">
-                                            <i class="bi bi-film me-1"></i> Film
-                                        </span>
-                                        <h5 class="card-title mb-0">Marvel Evrenindeki En İyi 10 Film</h5>
-                                    </div>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-sm bookmark-btn">
-                                        <i class="bi bi-bookmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="discover-card-content p-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            <img src="/api/placeholder/32/32" class="rounded-circle" alt="avatar">
-                                        </div>
-                                        <span class="fw-medium">Kemal Y.</span>
-                                    </div>
-                                    <small class="text-muted">3 gün önce</small>
-                                </div>
-                                <p class="card-text small">
-                                    Marvel sinematik evrenindeki en etkileyici 10 filmi sıraladım. Sizce listede değişiklik yapılmalı mı?
-                                </p>
-                                <div class="discover-card-footer d-flex justify-content-between align-items-center mt-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-heart me-1 text-danger"></i> 78
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-chat me-1 text-primary"></i> 12
-                                        </span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-eye me-1"></i> İncele
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dizi Listesi Örneği -->
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm discover-card">
-                        <div class="card-body p-0">
-                            <div class="discover-card-header position-relative p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <span class="badge bg-success rounded-pill mb-2">
-                                            <i class="bi bi-tv me-1"></i> Dizi
-                                        </span>
-                                        <h5 class="card-title mb-0">Tek Sezonluk Mükemmel Diziler</h5>
-                                    </div>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-sm bookmark-btn">
-                                        <i class="bi bi-bookmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="discover-card-content p-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            <img src="/api/placeholder/32/32" class="rounded-circle" alt="avatar">
-                                        </div>
-                                        <span class="fw-medium">Ayşe K.</span>
-                                    </div>
-                                    <small class="text-muted">1 hafta önce</small>
-                                </div>
-                                <p class="card-text small">
-                                    Sadece bir sezon sürmüş ama etkisini uzun süre bırakmış harika dizilerin listesi.
-                                </p>
-                                <div class="discover-card-footer d-flex justify-content-between align-items-center mt-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-heart me-1 text-danger"></i> 124
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-chat me-1 text-primary"></i> 23
-                                        </span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-eye me-1"></i> İncele
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tier Listesi Örneği -->
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm discover-card">
-                        <div class="card-body p-0">
-                            <div class="discover-card-header position-relative p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <span class="badge bg-warning rounded-pill mb-2">
-                                            <i class="bi bi-trophy me-1"></i> Tier
-                                        </span>
-                                        <h5 class="card-title mb-0">Star Wars Evrenindeki Filmler Tier</h5>
-                                    </div>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-sm bookmark-btn">
-                                        <i class="bi bi-bookmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="discover-card-content p-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            <img src="/api/placeholder/32/32" class="rounded-circle" alt="avatar">
-                                        </div>
-                                        <span class="fw-medium">Burak Z.</span>
-                                    </div>
-                                    <small class="text-muted">2 gün önce</small>
-                                </div>
-                                <p class="card-text small">
-                                    Star Wars evrenindeki tüm filmleri tier olarak sıraladım. Sizce hangi film hangi tier'a ait?
-                                </p>
-                                <div class="discover-card-footer d-flex justify-content-between align-items-center mt-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-heart me-1 text-danger"></i> 95
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-chat me-1 text-primary"></i> 34
-                                        </span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-eye me-1"></i> İncele
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Film Listesi Örneği 2 -->
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm discover-card">
-                        <div class="card-body p-0">
-                            <div class="discover-card-header position-relative p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <span class="badge bg-danger rounded-pill mb-2">
-                                            <i class="bi bi-film me-1"></i> Film
-                                        </span>
-                                        <h5 class="card-title mb-0">Yeni Başlayanlar İçin Anime Film Önerileri</h5>
-                                    </div>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-sm bookmark-btn">
-                                        <i class="bi bi-bookmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="discover-card-content p-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            <img src="/api/placeholder/32/32" class="rounded-circle" alt="avatar">
-                                        </div>
-                                        <span class="fw-medium">Selin D.</span>
-                                    </div>
-                                    <small class="text-muted">5 gün önce</small>
-                                </div>
-                                <p class="card-text small">
-                                    Anime dünyasına yeni giriş yapanlar için en iyi 15 film önerisi. Ghibli ve daha fazlası...
-                                </p>
-                                <div class="discover-card-footer d-flex justify-content-between align-items-center mt-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-heart me-1 text-danger"></i> 67
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-chat me-1 text-primary"></i> 9
-                                        </span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-eye me-1"></i> İncele
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dizi Listesi Örneği 2 -->
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm discover-card">
-                        <div class="card-body p-0">
-                            <div class="discover-card-header position-relative p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <span class="badge bg-success rounded-pill mb-2">
-                                            <i class="bi bi-tv me-1"></i> Dizi
-                                        </span>
-                                        <h5 class="card-title mb-0">2023'ün En İyi Netflix Dizileri</h5>
-                                    </div>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-sm bookmark-btn">
-                                        <i class="bi bi-bookmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="discover-card-content p-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            <img src="/api/placeholder/32/32" class="rounded-circle" alt="avatar">
-                                        </div>
-                                        <span class="fw-medium">Emre T.</span>
-                                    </div>
-                                    <small class="text-muted">1 gün önce</small>
-                                </div>
-                                <p class="card-text small">
-                                    2023 yılında Netflix'te yayınlanan ve mutlaka izlenmesi gereken yapımların listesi.
-                                </p>
-                                <div class="discover-card-footer d-flex justify-content-between align-items-center mt-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-heart me-1 text-danger"></i> 42
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-chat me-1 text-primary"></i> 7
-                                        </span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-eye me-1"></i> İncele
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tier Listesi Örneği 2 -->
-                <div class="col">
-                    <div class="card h-100 border-0 shadow-sm discover-card">
-                        <div class="card-body p-0">
-                            <div class="discover-card-header position-relative p-3">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <span class="badge bg-warning rounded-pill mb-2">
-                                            <i class="bi bi-trophy me-1"></i> Tier
-                                        </span>
-                                        <h5 class="card-title mb-0">Tüm Zamanların En İyi Süper Kahraman Filmleri</h5>
-                                    </div>
-                                    <button class="btn btn-sm btn-light rounded-circle shadow-sm bookmark-btn">
-                                        <i class="bi bi-bookmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="discover-card-content p-3">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar me-2">
-                                            <img src="/api/placeholder/32/32" class="rounded-circle" alt="avatar">
-                                        </div>
-                                        <span class="fw-medium">Ali B.</span>
-                                    </div>
-                                    <small class="text-muted">3 gün önce</small>
-                                </div>
-                                <p class="card-text small">
-                                    DC ve Marvel dahil olmak üzere tüm süper kahraman filmlerini tier listesinde değerlendirdim.
-                                </p>
-                                <div class="discover-card-footer d-flex justify-content-between align-items-center mt-3">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-heart me-1 text-danger"></i> 112
-                                        </span>
-                                        <span class="d-flex align-items-center">
-                                            <i class="bi bi-chat me-1 text-primary"></i> 28
-                                        </span>
-                                    </div>
-                                    <a href="#" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-eye me-1"></i> İncele
-                                    </a>
-                                </div>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a href="/Lists/Details/@list.Id" class="btn btn-sm btn-primary rounded-pill px-3">
+                                <i class="bi bi-eye me-1"></i> Görüntüle
+                            </a>
+@*                             <small class="text-muted">
+                                <i class="bi bi-heart-fill text-danger me-1"></i> @list.LikeCount
+                            </small> *@
                         </div>
                     </div>
                 </div>
             </div>
+        }
 
-            <!-- Sayfalama -->
-            <nav aria-label="Page navigation" class="mt-5">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class=" page-
+        @foreach (var list in Model.SeriesLists)
+        {
+            <div class="col list-item series d-none">
+                <div class="card border-0 shadow-sm h-100 rounded-4 hover-scale">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-success-subtle text-success">
+                                <i class="bi bi-tv me-1"></i> Dizi Listesi
+                            </span>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar2 me-1"></i> @list.CreatedDate.ToShortDateString()
+                            </small>
+                        </div>
+                        <h5 class="fw-bold text-truncate">@list.Title</h5>
+                        <p class="text-muted small">
+                            <i class="bi bi-person-circle me-1"></i>
+                            @(Model.UserNameDictionary.ContainsKey(list.AppUserId) ? Model.UserNameDictionary[list.AppUserId] : "Bilinmeyen")
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a href="/Lists/SeriesDetails/@list.Id" class="btn btn-sm btn-success rounded-pill px-3">
+                                <i class="bi bi-eye me-1"></i> Görüntüle
+                            </a>
+@*                             <small class="text-muted">
+                                <i class="bi bi-heart-fill text-danger me-1"></i> @list.LikeCount
+                            </small> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @foreach (var list in Model.TierLists)
+        {
+            <div class="col list-item tier d-none">
+                <div class="card border-0 shadow-sm h-100 rounded-4 hover-scale">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-info-subtle text-info">
+                                <i class="bi bi-diagram-3 me-1"></i> Tier List
+                            </span>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar2 me-1"></i> @list.CreatedDate.ToShortDateString()
+                            </small>
+                        </div>
+                        <h5 class="fw-bold text-truncate">@list.Title</h5>
+                        <p class="text-muted small">
+                            <i class="bi bi-person-circle me-1"></i>
+                            @(Model.UserNameDictionary.ContainsKey(list.AppUserId) ? Model.UserNameDictionary[list.AppUserId] : "Bilinmeyen")
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <a href="/Lists/TierDetails/@list.Id" class="btn btn-sm btn-info text-white rounded-pill px-3">
+                                <i class="bi bi-eye me-1"></i> Görüntüle
+                            </a>
+@*                             <small class="text-muted">
+                                <i class="bi bi-heart-fill text-danger me-1"></i> @list.LikeCount
+                            </small> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+
+        .hover-shadow:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+        }
+
+    .list-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+
+    .film-badge {
+        background: linear-gradient(135deg, #f5505e, #ef1f36);
+    }
+
+    .series-badge {
+        background: linear-gradient(135deg, #36d39a, #12a86d);
+    }
+
+    .tier-badge {
+        background: linear-gradient(135deg, #ffc107, #ff9800);
+    }
+
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.75rem 1rem;
+    }
+
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            background-color: rgba(0,0,0,0.02);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            background-color: transparent;
+            border-bottom: 2px solid #0d6efd;
+        }
+
+    .card {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .text-muted i.bi {
+        opacity: 0.5;
+    }
+
+    .hover-scale {
+        transition: transform 0.3s ease;
+    }
+
+        .hover-scale:hover {
+            transform: scale(1.03);
+        }
+
+</style>
+
+<script>
+    function filterLists(type) {
+        const all = document.querySelectorAll(".list-item");
+        const buttons = document.querySelectorAll(".btn-group .btn");
+        buttons.forEach(btn => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        all.forEach(item => {
+            if (item.classList.contains(type)) {
+                item.classList.remove("d-none");
+            } else {
+                item.classList.add("d-none");
+            }
+        });
+    }
+</script>

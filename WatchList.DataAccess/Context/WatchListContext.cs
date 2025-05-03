@@ -16,7 +16,6 @@ namespace WatchList.DataAccess.Context
         {
 
         }
-
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Series> Series { get; set; }
 
@@ -70,8 +69,6 @@ namespace WatchList.DataAccess.Context
                 .HasForeignKey(t => t.SeriesId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
-
             // 4- MovieList silinirse -> içindeki MovieListItem'lar silinsin
             modelBuilder.Entity<MovieListItem>()
                 .HasOne(m => m.MovieList)
@@ -93,10 +90,5 @@ namespace WatchList.DataAccess.Context
                 .HasForeignKey(t => t.TierListId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
-
-
-
-
-
     }
 }

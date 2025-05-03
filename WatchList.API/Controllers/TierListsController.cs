@@ -51,7 +51,8 @@ namespace WatchList.API.Controllers
         public IActionResult GetSharedTierList(int id)
         {
             var values = _tierListService.TGetFilteredList(x => x.IsShared == true);
-            return Ok(values);
+            var mappedValues = _mapper.Map<List<ListTierListDto>>(values);
+            return Ok(mappedValues);
         }
 
         [HttpGet("GetTierListByUserId/{id}")]
