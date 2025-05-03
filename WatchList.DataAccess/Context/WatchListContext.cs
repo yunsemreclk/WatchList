@@ -35,52 +35,65 @@ namespace WatchList.DataAccess.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            //MovieListItem tablosunda aynı Movie bir listeye iki kez eklenemesin diye benzersiz indeks
+            // 1- Aynı Movie veya Series bir listeye iki kez eklenemesin (UNIQUE INDEX)
             modelBuilder.Entity<MovieListItem>()
                 .HasIndex(m => new { m.MovieListId, m.MovieId })
                 .IsUnique();
 
-            //SeriesListItem tablosunda aynı Series bir listeye iki kez eklenemesin diye benzersiz indeks
             modelBuilder.Entity<SeriesListItem>()
                 .HasIndex(s => new { s.SeriesListId, s.SeriesId })
                 .IsUnique();
 
-
-            //Movie silindiğinde, MovieListItem üzerinden zincirleme silme olmasın
+            // 2- Movie silinirse -> ona bağlı MovieListItem ve TierListItem silinsin
             modelBuilder.Entity<MovieListItem>()
                 .HasOne(m => m.Movie)
                 .WithMany(m => m.MovieListItems)
                 .HasForeignKey(m => m.MovieId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //MovieList silindiğinde, MovieListItem üzerinden zincirleme silme olmasın
-            modelBuilder.Entity<MovieListItem>()
-                .HasOne(m => m.MovieList)
-                .WithMany(l => l.Movies)
-                .HasForeignKey(m => m.MovieListId)
-                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<TierListItem>()
+                .HasOne(t => t.Movie)
+                .WithMany(m => m.TierListItems)
+                .HasForeignKey(t => t.MovieId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //Series silinince SeriesListItem zincirleme silinmesin
+            // 3- Series silinirse -> ona bağlı SeriesListItem ve TierListItem silinsin
             modelBuilder.Entity<SeriesListItem>()
                 .HasOne(s => s.Series)
                 .WithMany(s => s.SeriesListItems)
                 .HasForeignKey(s => s.SeriesId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //SeriesList silinince SeriesListItem zincirleme silinmesin
+            modelBuilder.Entity<TierListItem>()
+                .HasOne(t => t.Series)
+                .WithMany(s => s.TierListItems)
+                .HasForeignKey(t => t.SeriesId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+
+            // 4- MovieList silinirse -> içindeki MovieListItem'lar silinsin
+            modelBuilder.Entity<MovieListItem>()
+                .HasOne(m => m.MovieList)
+                .WithMany(l => l.Movies)
+                .HasForeignKey(m => m.MovieListId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 5- SeriesList silinirse -> içindeki SeriesListItem'lar silinsin
             modelBuilder.Entity<SeriesListItem>()
                 .HasOne(s => s.SeriesList)
                 .WithMany(l => l.Series)
                 .HasForeignKey(s => s.SeriesListId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //TierList silinince TierListItem zincirleme silinmesin
+            // 6- TierList silinirse -> içindeki TierListItem'lar silinsin
             modelBuilder.Entity<TierListItem>()
                 .HasOne(t => t.TierList)
                 .WithMany(l => l.Items)
                 .HasForeignKey(t => t.TierListId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
+
 
 
 

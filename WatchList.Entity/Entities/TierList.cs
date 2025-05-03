@@ -24,14 +24,22 @@ namespace WatchList.Entity.Entites
     public class TierListItem
     {
         public int Id { get; set; }
+
         public int TierListId { get; set; }
         public TierList TierList { get; set; }
 
-        public string ItemType { get; set; }
-        public int ItemId { get; set; }
         public string Tier { get; set; }
         public string Title { get; set; }
         public string PosterUrl { get; set; }
+
+        public string ItemType { get; set; } // "movie" veya "series"
+
+        public int? MovieId { get; set; }
+        public Movie? Movie { get; set; }
+
+        public int? SeriesId { get; set; }
+        public Series? Series { get; set; }
     }
+
 
 }

@@ -22,8 +22,26 @@ namespace WatchList.WebUI.Areas.User.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            var values = await _client.GetFromJsonAsync<List<ListMovieListDto>>("movies/GetMovieListByUserId/" + user.Id);
+            var values = await _client.GetFromJsonAsync<List<ListMovieListDto>>("movielists/GetMovieListByUserId/" + user.Id);
             return View(values);
+
+
         }
+
+        public IActionResult Create() 
+        {
+            return View();  
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateMovieListDto createMovieListDto)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
+            createMovieListDto.AppUserId = user.Id;
+            await _client.PostAsJsonAsync("movielists", createMovieListDto);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

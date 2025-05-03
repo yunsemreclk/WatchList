@@ -20,6 +20,8 @@ namespace WatchList.Entity.Entites
 
         public ICollection<MovieListItem> MovieListItems { get; set; }
 
+        public ICollection<TierListItem> TierListItems { get; set; }
+
         public int? AppUserId { get; set; }
         public AppUser AppUser { get; set; }
     }

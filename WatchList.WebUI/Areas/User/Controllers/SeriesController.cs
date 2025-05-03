@@ -42,8 +42,11 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateSeriesDto createMovieDto)
         {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
+            createMovieDto.AppUserId = user.Id;
             await _client.PostAsJsonAsync("series", createMovieDto);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));         
+         
         }
 
         public async Task<IActionResult> UpdateSeries(int id)

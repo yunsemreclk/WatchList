@@ -23,6 +23,8 @@ namespace WatchList.Entity.Entites
 
         public ICollection<SeriesListItem> SeriesListItems { get; set; }
 
+        public ICollection<TierListItem> TierListItems { get; set; }
+
         public int? AppUserId { get; set; }
         public AppUser AppUser { get; set; }
     }

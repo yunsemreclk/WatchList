@@ -14,13 +14,29 @@ namespace WatchList.API.Mapping
         }
     }
 
-    public class TierListItemProfile : Profile 
+    public class TierListItemProfile : Profile
     {
         public TierListItemProfile()
         {
-            CreateMap<CreateTierListItemDto, TierListItem>().ReverseMap();
-            CreateMap<ListTierListItemDto, TierListItem>().ReverseMap();
-            CreateMap<UpdateTierListItemDto, TierListItem>().ReverseMap();
+            // CreateMapping ile DTO ve Entity arasında dönüşüm sağlıyoruz.
+            CreateMap<CreateTierListItemDto, TierListItem>()
+                .ForMember(dest => dest.MovieId, opt => opt.MapFrom(src => src.MovieId))
+                .ForMember(dest => dest.SeriesId, opt => opt.MapFrom(src => src.SeriesId))
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.MovieId.HasValue ? "Movie" : "Series"))
+                .ReverseMap();
+
+            CreateMap<ListTierListItemDto, TierListItem>()
+                .ForMember(dest => dest.MovieId, opt => opt.MapFrom(src => src.MovieId))
+                .ForMember(dest => dest.SeriesId, opt => opt.MapFrom(src => src.SeriesId))
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.MovieId.HasValue ? "Movie" : "Series"))
+                .ReverseMap();
+
+            CreateMap<UpdateTierListItemDto, TierListItem>()
+                .ForMember(dest => dest.MovieId, opt => opt.MapFrom(src => src.MovieId))
+                .ForMember(dest => dest.SeriesId, opt => opt.MapFrom(src => src.SeriesId))
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.MovieId.HasValue ? "Movie" : "Series"))
+                .ReverseMap();
         }
     }
+
 }

@@ -15,7 +15,7 @@ namespace WatchList.DTO.DTOs.SeriesListDtos
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-        public ICollection<int> SeriesIds { get; set; }
+        public ICollection<int>? SeriesIds { get; set; }
 
         public int AppUserId { get; set; }
     }

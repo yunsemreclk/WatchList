@@ -13,7 +13,7 @@ namespace WatchList.WebUI.DTOs.MovieListDtos
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
-        public ICollection<int> MovieIds { get; set; }
+        public ICollection<int>? MovieIds { get; set; }
 
         public int AppUserId { get; set; }
     }

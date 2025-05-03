@@ -25,25 +25,6 @@ namespace WatchList.WebUI.Areas.User.Controllers
             return View(values);
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task<IActionResult> DeleteMovie(int id)
         {
             await _client.DeleteAsync($"movies/{id}");
@@ -58,9 +39,14 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieDto createMovieDto)
         {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
+            createMovieDto.AppUserId = user.Id;
             await _client.PostAsJsonAsync("movies", createMovieDto);
             return RedirectToAction(nameof(Index));
+
         }
+
+
 
         public async Task<IActionResult> UpdateMovie(int id)
         {

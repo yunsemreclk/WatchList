@@ -24,6 +24,9 @@ namespace WatchList.WebUI.DTOs.TierListDtos
 
         public string ItemType { get; set; } // Movie or Series
         public int ItemId { get; set; } // MovieId or SeriesId
+
+        public int? MovieId { get; set; } // Nullable MovieId
+        public int? SeriesId { get; set; } // Nullable SeriesId
         public string Tier { get; set; } // S, A, B, C, D, F
         public string Title { get; set; }
         public string PosterUrl { get; set; }
