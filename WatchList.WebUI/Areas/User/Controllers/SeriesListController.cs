@@ -22,6 +22,12 @@ namespace WatchList.WebUI.Areas.User.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _client.DeleteAsync($"serieslists/{id}");
+            return RedirectToAction("Index", "Lists");
+        }
+
         public IActionResult Create()
         {
             return View();

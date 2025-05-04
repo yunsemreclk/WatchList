@@ -20,12 +20,13 @@ namespace WatchList.WebUI.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            return View();
+        }
 
-            var values = await _client.GetFromJsonAsync<List<ListMovieListDto>>("movielists/GetMovieListByUserId/" + user.Id);
-            return View(values);
-
-
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _client.DeleteAsync($"movielists/{id}");
+            return RedirectToAction("Index", "Lists");
         }
 
         public IActionResult Create() 
