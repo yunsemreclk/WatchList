@@ -15,7 +15,7 @@ namespace WatchList.DTO.DTOs.TierListDtos
         public string Title { get; set; }
         public bool IsShared { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-
+        public ICollection<int> SeriesIds { get; set; }
         public int AppUserId { get; set; }
 
     }
@@ -23,14 +23,9 @@ namespace WatchList.DTO.DTOs.TierListDtos
     {
         public int Id { get; set; }
         public int TierListId { get; set; }
-
-        public string ItemType { get; set; } // Movie or Series
-        public int ItemId { get; set; } // MovieId or SeriesId
-
+        public string ItemType { get; set; }
         public int? MovieId { get; set; } // Nullable MovieId
         public int? SeriesId { get; set; } // Nullable SeriesId
-        public string Tier { get; set; } // S, A, B, C, D, F
-        public string Title { get; set; }
-        public string PosterUrl { get; set; }
+        public string Tier { get; set; } // S, A, B, C, D, F gibi yada kullanıcının kendi oluşturduğu bir tier
     }
 }

@@ -1,0 +1,193 @@
+﻿@model WatchList.WebUI.Areas.User.Controllers.TierListPageViewModel
+@{
+    ViewData["Title"] = "Film Listesi Düzenle";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    var tiers = new[] { "S", "A", "B", "C", "D", "F" };
+}
+
+
+@foreach (var t in tiers)
+{
+    <h3>@t Tier</h3>
+    <div class="tier-group">
+        @if (Model.ListTierListItem != null && Model.ListTierListItem.Any(i => i.Tier == t))
+        {
+            @foreach (var tierItem in Model.ListTierListItem.Where(i => i.Tier == t))
+            {
+                var tier = Model.Movies.FirstOrDefault(m => m.Id == tierItem.MovieId);
+                if (tier != null)
+                {
+                    <div class="tier-card">
+                        <img src="@tier.PosterUrl" alt="@tier.Title" />
+                        <div class="tier-card-body">
+                            <h6>@tier.Title</h6>
+                            <small>@tier.ReleaseYear</small>
+
+                            <form method="post" asp-action="DeleteItem" asp-controller="TierList">
+                                <input type="hidden" name="id" value="@tierItem.Id" />
+                                <input type="hidden" name="tierListId" value="@tierItem.TierListId" />
+                                <button type="submit" class="btn btn-sm btn-danger mt-2">
+                                    <i class="bi bi-trash"></i> Sil
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <p>Bu tier seviyesinde öğe yok.</p>
+        }
+    </div>
+}
+
+
+
+@if (!Model.Movies.Any())
+{
+    <div class="alert alert-info text-center my-5">
+        <h4>Henüz film eklenmemiş</h4>
+        <p>Film eklemek için aşağıdaki filmlerden birine tıklayın.</p>
+    </div>
+}
+else
+{
+    <div class="tier-scroll-container">
+        @foreach (var tier in Model.Movies)
+        {
+            <div class="tier-card" data-tier-id="@tier.Id">
+                @if (!string.IsNullOrEmpty(tier.PosterUrl))
+                {
+                    <img src="@tier.PosterUrl" alt="@tier.Title" />
+                }
+                else
+                {
+                    <div class="tier-placeholder">
+                        <i class="bi bi-film"></i>
+                    </div>
+                }
+                <div class="tier-card-body">
+                    <h6 class="text-truncate" title="@tier.Title">@tier.Title</h6>
+                    <small class="text-muted">@tier.ReleaseYear</small>
+                    <button class="btn btn-sm btn-outline-primary mt-2 add-btn" data-movie-id="@tier.Id">Listeye Ekle</button>
+
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<form id="addMovieForm" method="post" asp-action="Edit" style="display:none;">
+    <input type="hidden" name="TierListId" value="@Model.TierList.Id" />
+    <input type="hidden" name="MovieId" id="hiddenMovieId" />
+    <input type="hidden" name="Tier" id="hiddenTier" />
+    <input type="hidden" name="ItemType" value="Movie" />
+</form>
+
+<!-- Tier seçimi için küçük bir dropdown (gizli olabilir, modal da olabilir) -->
+<select id="tierSelect" class="form-select d-none">
+    <option value="">Tier seçiniz</option>
+    <option value="S">S</option>
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+    <option value="F">F</option>
+</select>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".add-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const movieId = this.dataset.movieId;
+                const selectedTier = prompt("Lütfen bir tier seçin (S, A, B, C, D, F):");
+
+                if (!["S", "A", "B", "C", "D", "F"].includes(selectedTier)) {
+                    alert("Geçerli bir tier girilmedi.");
+                    return;
+                }
+
+
+                document.getElementById("hiddenMovieId").value = movieId;
+                document.getElementById("hiddenTier").value = selectedTier;
+
+                document.getElementById("addMovieForm").submit();
+            });
+        });
+    </script>
+}
+
+
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .top-content-placeholder {
+        height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 2rem;
+        background: #fdfdfd;
+        text-align: center;
+    }
+
+    .tier-scroll-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #f8f9fa;
+        padding: 1rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        max-height: 40vh;
+    }
+
+    .tier-card {
+        display: inline-block;
+        width: 180px;
+        height: 280px;
+        margin-right: 1rem;
+        vertical-align: top;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+        position: relative;
+    }
+
+        .tier-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tier-card img,
+        .tier-placeholder {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+    .tier-placeholder {
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888;
+        font-size: 2rem;
+    }
+
+    .tier-card-body {
+        padding: 0.75rem;
+        text-align: center;
+    }
+</style>

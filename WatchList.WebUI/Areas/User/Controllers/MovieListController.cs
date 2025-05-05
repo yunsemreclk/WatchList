@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using WatchList.Entity.Entites;
 using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.MovieDtos;
 using WatchList.WebUI.DTOs.MovieListDtos;
 using WatchList.WebUI.Helpers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace WatchList.WebUI.Areas.User.Controllers
@@ -33,9 +35,9 @@ namespace WatchList.WebUI.Areas.User.Controllers
             return RedirectToAction("Index", "Lists");
         }
 
-        public IActionResult Create() 
+        public IActionResult Create()
         {
-            return View();  
+            return View();
         }
 
 
@@ -54,12 +56,16 @@ namespace WatchList.WebUI.Areas.User.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + user.Id);
             var movieList = await _client.GetFromJsonAsync<UpdateMovieListDto>($"movielists/{Id}");
+            var movieListItem = await _client.GetFromJsonAsync<List<ListMovieListItemDto>>("movielistitem/GetMovieListItemByMovieListId/" + movieList.Id);
 
+
+            //GetMovieListItemByMovieListId
             var viewModel = new MovieListPageViewModel
             {
                 Movies = movies,
                 MovieList = movieList,
-                MovieListItem = new CreateMovieListItemDto { MovieListId = Id }
+                MovieListItem = new CreateMovieListItemDto { MovieListId = Id },
+                ListMovieListItem = movieListItem
             };
 
             return View(viewModel);
@@ -68,18 +74,56 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CreateMovieListItemDto createMovieListItemDto)
         {
+            // Listeye ait mevcut item'ları çek
+            var existingItems = await _client.GetFromJsonAsync<List<ListMovieListItemDto>>(
+                "movielistitem/GetMovieListItemByMovieListId/" + createMovieListItemDto.MovieListId);
+
+            // Aynı film zaten var mı?
+            var isExists = existingItems.Any(x => x.MovieId == createMovieListItemDto.MovieId);
+            if (isExists)
+            {
+                TempData["ErrorMessage"] = "Bu film zaten listede var.";
+                return RedirectToAction(nameof(Edit), new { id = createMovieListItemDto.MovieListId });
+            }
+
+            // Eklemeye devam
             await _client.PostAsJsonAsync("movielistitem", createMovieListItemDto);
-            return RedirectToAction(nameof(Edit), new { listId = createMovieListItemDto.MovieListId });
+            return RedirectToAction(nameof(Edit), new { id = createMovieListItemDto.MovieListId });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteItem(int id, int movieListId)
+        {
+            await _client.DeleteAsync($"movielistitem/{id}");
+            return RedirectToAction("Edit", "MovieList", new { id = movieListId });
+        }
 
+        public async Task<IActionResult> Details(int Id)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
+            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + user.Id);
+            var movieList = await _client.GetFromJsonAsync<UpdateMovieListDto>($"movielists/{Id}");
+            var movieListItem = await _client.GetFromJsonAsync<List<ListMovieListItemDto>>("movielistitem/GetMovieListItemByMovieListId/" + movieList.Id);
+
+            var viewModel = new MovieListPageViewModel
+            {
+                Movies = movies,
+                MovieList = movieList,
+                MovieListItem = null, // Form olmayacak, sadece görüntüleme
+                ListMovieListItem = movieListItem
+            };
+            return View(viewModel);
+        }
     }
 
     public class MovieListPageViewModel
     {
+        public ListMovieDto Movie { get; set; }
         public List<ListMovieDto> Movies { get; set; }
         public UpdateMovieListDto MovieList { get; set; }
-        public CreateMovieListItemDto MovieListItem  { get; set; }     
+        public CreateMovieListItemDto MovieListItem { get; set; }
+        public List<ListMovieListItemDto> ListMovieListItem { get; set; }
     }
 }
+

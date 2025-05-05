@@ -1,29 +1,30 @@
-﻿@model WatchList.WebUI.Areas.User.Controllers.MovieListPageViewModel
+﻿@model WatchList.WebUI.Areas.User.Controllers.SeriesListPageViewModel
+
 @{
-    ViewData["Title"] = Model.MovieList?.Title ?? "Film Listesi";
+    ViewData["Title"] = Model.SeriesList?.Title ?? "Film Listesi";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
 <div class="container mt-4">
     <div class="text-center mb-4">
-        <h2>@Model.MovieList?.Title</h2>
+        <h2>@Model.SeriesList?.Title</h2>
     </div>
 
-    @if (Model.ListMovieListItem != null && Model.ListMovieListItem.Any())
+    @if (Model.ListSeriesListItem != null && Model.ListSeriesListItem.Any())
     {
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            @foreach (var movieItem in Model.ListMovieListItem)
+            @foreach (var seriesItem in Model.ListSeriesListItem)
             {
-                var movie = Model.Movies.FirstOrDefault(m => m.Id == movieItem.MovieId);
-                if (movie != null)
+                var series = Model.Series.FirstOrDefault(m => m.Id == seriesItem.SeriesId);
+                if (series != null)
                 {
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0 hover-scale">
-                            <img src="@movie.PosterUrl" class="card-img-top img-fluid rounded-top" alt="@movie.Title" />
+                            <img src="@series.PosterUrl" class="card-img-top img-fluid rounded-top" alt="@series.Title" />
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div>
-                                    <h5 class="card-title">@movie.Title</h5>
-                                    <p class="card-text text-muted">@movie.ReleaseYear</p>
+                                    <h5 class="card-title">@series.Title</h5>
+                                    <p class="card-text text-muted">@series.CreatedDate</p>
                                 </div>
                             </div>
                         </div>

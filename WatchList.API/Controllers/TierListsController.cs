@@ -102,5 +102,13 @@ namespace WatchList.API.Controllers
             _tierListItemService.TUpdate(value);
             return Ok("Güncellendi");
         }
+
+        [HttpGet("GetTierListItemByTierListId/{id}")]
+        public IActionResult GetMovieListByUserId(int id)
+        {
+            var values = _tierListItemService.TGetFilteredList(x => x.TierListId == id);
+            var mappedValues = _mapper.Map<List<ListTierListItemDto>>(values);
+            return Ok(mappedValues);
+        }
     }
 }

@@ -51,12 +51,14 @@ namespace WatchList.WebUI.Areas.User.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + user.Id);
             var seriesList = await _client.GetFromJsonAsync<UpdateSeriesListDto>($"serieslists/{Id}");
+            var seriesListItem = await _client.GetFromJsonAsync<List<ListSeriesListItemDto>>("serieslistitem/GetSeriesListItemBySeriesListId/" + seriesList.Id);
 
             var viewModel = new SeriesListPageViewModel
             {
                 Series = series,
                 SeriesList = seriesList,
-                SeriesListItem = new CreateSeriesListItemDto { SeriesListId = Id }
+                SeriesListItem = new CreateSeriesListItemDto { SeriesListId = Id },
+                ListSeriesListItem = seriesListItem
             };
 
             return View(viewModel);
@@ -65,15 +67,55 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CreateSeriesListItemDto createSeriesListItemDto)
         {
+            // Listeye ait mevcut item'ları çek
+            var existingItems = await _client.GetFromJsonAsync<List<ListSeriesListItemDto>>(
+                "serieslistitem/GetSeriesListItemBySeriesListId/" + createSeriesListItemDto.SeriesListId);
+
+            // Aynı film zaten var mı?
+            var isExists = existingItems.Any(x => x.SeriesId == createSeriesListItemDto.SeriesId);
+            if (isExists)
+            {
+                TempData["ErrorMessage"] = "Bu film zaten listede var.";
+                return RedirectToAction(nameof(Edit), new { id = createSeriesListItemDto.SeriesListId });
+            }
+
+            // Eklemeye devam
             await _client.PostAsJsonAsync("serieslistitem", createSeriesListItemDto);
-            return RedirectToAction(nameof(Edit), new { listId = createSeriesListItemDto.SeriesListId });
+            return RedirectToAction(nameof(Edit), new { id = createSeriesListItemDto.SeriesListId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteItem(int id, int seriesListId)
+        {
+            await _client.DeleteAsync($"serieslistitem/{id}");
+            return RedirectToAction("Edit", "SeriesList", new { id = seriesListId });
+        }
+
+        public async Task<IActionResult> Details(int Id)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + user.Id);
+            var seriesList = await _client.GetFromJsonAsync<UpdateSeriesListDto>($"serieslists/{Id}");
+            var seriesListItem = await _client.GetFromJsonAsync<List<ListSeriesListItemDto>>("serieslistitem/GetSeriesListItemBySeriesListId/" + seriesList.Id);
+
+            var viewModel = new SeriesListPageViewModel
+            {
+                Series = series,
+                SeriesList = seriesList,
+                SeriesListItem = null, // Form olmayacak, sadece görüntüleme
+                ListSeriesListItem = seriesListItem
+            };
+            return View(viewModel);
         }
     }
 
     public class SeriesListPageViewModel
     {
+        public ListSeriesDto Serie { get; set; }
         public List<ListSeriesDto> Series { get; set; }
         public UpdateSeriesListDto SeriesList { get; set; }
         public CreateSeriesListItemDto SeriesListItem { get; set; }
+        public List<ListSeriesListItemDto> ListSeriesListItem { get; set; }
     }
 }

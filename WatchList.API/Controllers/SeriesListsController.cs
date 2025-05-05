@@ -102,5 +102,13 @@ namespace WatchList.API.Controllers
             _SeriesListItemService.TUpdate(value);
             return Ok("Güncellendi");
         }
+
+        [HttpGet("GetSeriesListItemBySeriesListId/{id}")]
+        public IActionResult GetMovieListByUserId(int id)
+        {
+            var values = _SeriesListItemService.TGetFilteredList(x => x.SeriesListId == id);
+            var mappedValues = _mapper.Map<List<ListSeriesListItemDto>>(values);
+            return Ok(mappedValues);
+        }
     }
 }
