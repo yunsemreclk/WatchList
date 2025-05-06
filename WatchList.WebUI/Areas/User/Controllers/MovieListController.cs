@@ -47,7 +47,7 @@ namespace WatchList.WebUI.Areas.User.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
             createMovieListDto.AppUserId = user.Id;
             await _client.PostAsJsonAsync("movielists", createMovieListDto);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Lists");
         }
 
         [HttpGet]

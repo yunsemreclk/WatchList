@@ -1,0 +1,130 @@
+﻿@model WatchList.WebUI.Areas.User.Controllers.TierListPageViewModel
+@{
+    ViewData["Title"] = "Tierlist Detay";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    var tiers = new[] { "S", "A", "B", "C", "D", "F" };
+    var type = Context.Request.Query["type"].ToString() ?? "Movie";
+    var isMovie = type == "Movie";
+}
+
+<div class="btn-group mb-4" role="group">
+    <a href="?type=Movie" class="btn btn-outline-primary @(isMovie ? "active" : "")">Movie</a>
+    <a href="?type=Series" class="btn btn-outline-primary @(!isMovie ? "active" : "")">Series</a>
+</div>
+
+@foreach (var t in tiers)
+{
+    <h3>@t Tier</h3>
+    <div class="tier-group">
+        @if (Model.ListTierListItem != null && Model.ListTierListItem.Any(i => i.Tier == t))
+        {
+            @foreach (var tierItem in Model.ListTierListItem.Where(i => i.Tier == t))
+            {
+                if (isMovie && tierItem.MovieId.HasValue)
+                {
+                    var movie = Model.Movies.FirstOrDefault(m => m.Id == tierItem.MovieId);
+                    if (movie != null)
+                    {
+                        <div class="tier-card">
+                            <img src="@movie.PosterUrl" alt="@movie.Title" />
+                            <div class="tier-card-body">
+                                <h6>@movie.Title</h6>
+                                <small>@movie.ReleaseYear</small>
+                            </div>
+                        </div>
+                    }
+                }
+                else if (!isMovie && tierItem.SeriesId.HasValue)
+                {
+                    var series = Model.Series.FirstOrDefault(s => s.Id == tierItem.SeriesId);
+                    if (series != null)
+                    {
+                        <div class="tier-card">
+                            <img src="@series.PosterUrl" alt="@series.Title" />
+                            <div class="tier-card-body">
+                                <h6>@series.Title</h6>
+                                <small>@series.CreatedDate</small>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        }
+        else
+        {
+            <p>Bu tier seviyesinde öğe yok.</p>
+        }
+    </div>
+}
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .top-content-placeholder {
+        height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 2rem;
+        background: #fdfdfd;
+        text-align: center;
+    }
+
+    .tier-scroll-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #f8f9fa;
+        padding: 1rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        max-height: 40vh;
+    }
+
+    .tier-card {
+        display: inline-block;
+        width: 180px;
+        height: 280px;
+        margin-right: 1rem;
+        vertical-align: top;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+        position: relative;
+    }
+
+        .tier-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tier-card img,
+        .tier-placeholder {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+    .tier-placeholder {
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888;
+        font-size: 2rem;
+    }
+
+    .tier-card-body {
+        padding: 0.75rem;
+        text-align: center;
+    }
+</style>
