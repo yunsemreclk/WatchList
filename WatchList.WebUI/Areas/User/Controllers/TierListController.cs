@@ -51,20 +51,20 @@ namespace WatchList.WebUI.Areas.User.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>($"movies/GetMovieByUserId/{user.Id}");
-            //var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>($"series/GetSeriesByUserId/{user.Id}");
+            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>($"series/GetSeriesByUserId/{user.Id}");
 
             var tierList = await _client.GetFromJsonAsync<UpdateTierListDto>($"tierlists/{Id}");
             var tierListItems = await _client.GetFromJsonAsync<List<ListTierListItemDto>>("tierlistitem/GetTierListItemByTierListId/" + tierList.Id);
 
             var viewModel = new TierListPageViewModel
             {
-                //Series = series,
+                Series = series,
 
                 Movies = movies,
                 TierList = tierList,
                 TierListItem = new CreateTierListItemDto { TierListId = Id },
                 ListTierListItem = tierListItems,
-                Tier = new() { "S", "A", "B", "C", "D", "F" }
+                Tier = new() { "S", "A", "B", "C", "D", "F" },
             };
 
             return View(viewModel);
@@ -79,8 +79,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
             bool exists = false;
             if (createTierListItemDto.ItemType == "Movie")
                 exists = existingItems.Any(x => x.MovieId == createTierListItemDto.MovieId);
-            //else if (createTierListItemDto.ItemType == "Series")
-            //    exists = existingItems.Any(x => x.SeriesId == createTierListItemDto.SeriesId);
+            else if (createTierListItemDto.ItemType == "Series")
+                exists = existingItems.Any(x => x.SeriesId == createTierListItemDto.SeriesId);
 
             if (exists)
             {
@@ -89,7 +89,7 @@ namespace WatchList.WebUI.Areas.User.Controllers
             }
 
             await _client.PostAsJsonAsync("tierlistitem", createTierListItemDto);
-            return RedirectToAction(nameof(Edit), new { id = createTierListItemDto.TierListId });
+            return RedirectToAction(nameof(Edit), new { id = createTierListItemDto.TierListId});
         }
 
         [HttpPost]
@@ -129,8 +129,6 @@ namespace WatchList.WebUI.Areas.User.Controllers
         public UpdateTierListDto TierList { get; set; }
         public CreateTierListItemDto TierListItem { get; set; }
         public List<ListTierListItemDto> ListTierListItem { get; set; }
-
-
         public List<string> Tier { get; set; } = new();
     }
 

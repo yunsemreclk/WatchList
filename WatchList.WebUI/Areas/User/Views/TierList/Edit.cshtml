@@ -3,8 +3,13 @@
     ViewData["Title"] = "Film Listesi Düzenle";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
     var tiers = new[] { "S", "A", "B", "C", "D", "F" };
+    var type = Context.Request.Query["type"].ToString() ?? "Movie";
+    var isMovie = type == "Movie";
 }
-
+<div class="btn-group mb-4" role="group">
+    <a href="?type=Movie" class="btn btn-outline-primary @(isMovie ? "active" : "")">Movie</a>
+    <a href="?type=Series" class="btn btn-outline-primary @(!isMovie ? "active" : "")">Series</a>
+</div>
 
 @foreach (var t in tiers)
 {
@@ -14,24 +19,49 @@
         {
             @foreach (var tierItem in Model.ListTierListItem.Where(i => i.Tier == t))
             {
-                var tier = Model.Movies.FirstOrDefault(m => m.Id == tierItem.MovieId);
-                if (tier != null)
+                if (isMovie && tierItem.MovieId.HasValue)
                 {
-                    <div class="tier-card">
-                        <img src="@tier.PosterUrl" alt="@tier.Title" />
-                        <div class="tier-card-body">
-                            <h6>@tier.Title</h6>
-                            <small>@tier.ReleaseYear</small>
+                    var movie = Model.Movies.FirstOrDefault(m => m.Id == tierItem.MovieId);
+                    if (movie != null)
+                    {
+                        <div class="tier-card">
+                            <img src="@movie.PosterUrl" alt="@movie.Title" />
+                            <div class="tier-card-body">
+                                <h6>@movie.Title</h6>
+                                <small>@movie.ReleaseYear</small>
 
-                            <form method="post" asp-action="DeleteItem" asp-controller="TierList">
-                                <input type="hidden" name="id" value="@tierItem.Id" />
-                                <input type="hidden" name="tierListId" value="@tierItem.TierListId" />
-                                <button type="submit" class="btn btn-sm btn-danger mt-2">
-                                    <i class="bi bi-trash"></i> Sil
-                                </button>
-                            </form>
+                                <form method="post" asp-action="DeleteItem" asp-controller="TierList">
+                                    <input type="hidden" name="id" value="@tierItem.Id" />
+                                    <input type="hidden" name="tierListId" value="@tierItem.TierListId" />
+                                    <button type="submit" class="btn btn-sm btn-danger mt-2">
+                                        <i class="bi bi-trash"></i> Sil
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    }
+                }
+                else if (!isMovie && tierItem.SeriesId.HasValue)
+                {
+                    var series = Model.Series.FirstOrDefault(s => s.Id == tierItem.SeriesId);
+                    if (series != null)
+                    {
+                        <div class="tier-card">
+                            <img src="@series.PosterUrl" alt="@series.Title" />
+                            <div class="tier-card-body">
+                                <h6>@series.Title</h6>
+                                <small>@series.CreatedDate</small>
+
+                                <form method="post" asp-action="DeleteItem" asp-controller="TierList">
+                                    <input type="hidden" name="id" value="@tierItem.Id" />
+                                    <input type="hidden" name="tierListId" value="@tierItem.TierListId" />
+                                    <button type="submit" class="btn btn-sm btn-danger mt-2">
+                                        <i class="bi bi-trash"></i> Sil
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    }
                 }
             }
         }
@@ -42,83 +72,125 @@
     </div>
 }
 
+@{
+    var formId = isMovie ? "addMovieForm" : "addSeriesForm";
+    var itemIdField = isMovie ? "MovieId" : "SeriesId";
+    var hiddenItemIdField = isMovie ? "hiddenMovieId" : "hiddenSeriesId";
+    var itemIdAttribute = isMovie ? "data-movie-id" : "data-series-id";
+    var emptyMessage = isMovie ? "Henüz film eklenmemiş" : "Henüz dizi eklenmemiş";
+    var emptyDescription = isMovie ? "Film eklemek için aşağıdaki filmlerden birine tıklayın." : "Dizi eklemek için aşağıdaki dizilerden birine tıklayın.";
+}
 
-
-@if (!Model.Movies.Any())
+@if (isMovie)
 {
-    <div class="alert alert-info text-center my-5">
-        <h4>Henüz film eklenmemiş</h4>
-        <p>Film eklemek için aşağıdaki filmlerden birine tıklayın.</p>
-    </div>
+    @if (!Model.Movies.Any())
+    {
+        <div class="alert alert-info text-center my-5">
+            <h4>@emptyMessage</h4>
+            <p>@emptyDescription</p>
+        </div>
+    }
+    else
+    {
+        <div class="tier-scroll-container">
+            @foreach (var item in Model.Movies)
+            {
+                <div class="tier-card" data-tier-id="@item.Id">
+                    @if (!string.IsNullOrEmpty(item.PosterUrl))
+                    {
+                        <img src="@item.PosterUrl" alt="@item.Title" />
+                    }
+                    else
+                    {
+                        <div class="tier-placeholder">
+                            <i class="bi bi-film"></i>
+                        </div>
+                    }
+                    <div class="tier-card-body">
+                        <h6 class="text-truncate" title="@item.Title">@item.Title</h6>
+                        <small class="text-muted">@item.ReleaseYear</small>
+                        <button class="btn btn-sm btn-outline-primary mt-2 add-btn" data-movie-id="@item.Id">Listeye Ekle</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 }
 else
 {
-    <div class="tier-scroll-container">
-        @foreach (var tier in Model.Movies)
-        {
-            <div class="tier-card" data-tier-id="@tier.Id">
-                @if (!string.IsNullOrEmpty(tier.PosterUrl))
-                {
-                    <img src="@tier.PosterUrl" alt="@tier.Title" />
-                }
-                else
-                {
-                    <div class="tier-placeholder">
-                        <i class="bi bi-film"></i>
+    @if (!Model.Series.Any())
+    {
+        <div class="alert alert-info text-center my-5">
+            <h4>@emptyMessage</h4>
+            <p>@emptyDescription</p>
+        </div>
+    }
+    else
+    {
+        <div class="tier-scroll-container">
+            @foreach (var item in Model.Series)
+            {
+                <div class="tier-card" data-tier-id="@item.Id">
+                    @if (!string.IsNullOrEmpty(item.PosterUrl))
+                    {
+                        <img src="@item.PosterUrl" alt="@item.Title" />
+                    }
+                    else
+                    {
+                        <div class="tier-placeholder">
+                            <i class="bi bi-film"></i>
+                        </div>
+                    }
+                    <div class="tier-card-body">
+                        <h6 class="text-truncate" title="@item.Title">@item.Title</h6>
+                        <small class="text-muted">@item.CreatedDate</small>
+                        <button class="btn btn-sm btn-outline-primary mt-2 add-btn" data-series-id="@item.Id">Listeye Ekle</button>
                     </div>
-                }
-                <div class="tier-card-body">
-                    <h6 class="text-truncate" title="@tier.Title">@tier.Title</h6>
-                    <small class="text-muted">@tier.ReleaseYear</small>
-                    <button class="btn btn-sm btn-outline-primary mt-2 add-btn" data-movie-id="@tier.Id">Listeye Ekle</button>
-
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
 }
 
-<form id="addMovieForm" method="post" asp-action="Edit" style="display:none;">
+<form id="@formId" method="post" asp-action="Edit" style="display:none;">
     <input type="hidden" name="TierListId" value="@Model.TierList.Id" />
-    <input type="hidden" name="MovieId" id="hiddenMovieId" />
+    <input type="hidden" name="@itemIdField" id="@hiddenItemIdField" />
     <input type="hidden" name="Tier" id="hiddenTier" />
-    <input type="hidden" name="ItemType" value="Movie" />
+    <input type="hidden" name="ItemType" value="@type" />
 </form>
 
 <!-- Tier seçimi için küçük bir dropdown (gizli olabilir, modal da olabilir) -->
 <select id="tierSelect" class="form-select d-none">
     <option value="">Tier seçiniz</option>
-    <option value="S">S</option>
-    <option value="A">A</option>
-    <option value="B">B</option>
-    <option value="C">C</option>
-    <option value="D">D</option>
-    <option value="F">F</option>
+    @foreach (var tier in tiers)
+    {
+        <option value="@tier">@tier</option>
+    }
 </select>
 
 @section Scripts {
     <script>
         document.querySelectorAll(".add-btn").forEach(button => {
             button.addEventListener("click", function () {
-                const movieId = this.dataset.movieId;
+                const validTiers = ["S", "A", "B", "C", "D", "F"];
                 const selectedTier = prompt("Lütfen bir tier seçin (S, A, B, C, D, F):");
 
-                if (!["S", "A", "B", "C", "D", "F"].includes(selectedTier)) {
+                if (!validTiers.includes(selectedTier)) {
                     alert("Geçerli bir tier girilmedi.");
                     return;
                 }
 
-
-                document.getElementById("hiddenMovieId").value = movieId;
+                // Item ID'yi doğru input alanına set et
+                const itemId = this.getAttribute("@itemIdAttribute");
+                document.getElementById("@hiddenItemIdField").value = itemId;
                 document.getElementById("hiddenTier").value = selectedTier;
 
-                document.getElementById("addMovieForm").submit();
+                // Formu gönder
+                document.getElementById("@formId").submit();
             });
         });
     </script>
 }
-
-
 
 <style>
     body {
