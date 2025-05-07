@@ -30,6 +30,7 @@ namespace WatchList.WebUI
             {
                 cfg.LoginPath = "/Login/SignIn";
                 cfg.LogoutPath = "/Login/SignOut";
+                cfg.AccessDeniedPath = "/ErrorPage/AccessDenied403";
             });
             builder.Services.AddControllersWithViews();
 
@@ -48,7 +49,7 @@ namespace WatchList.WebUI
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseStatusCodePagesWithReExecute("/ErrorPage/NotFound404");
             app.UseAuthentication();
             app.UseAuthorization();
 
