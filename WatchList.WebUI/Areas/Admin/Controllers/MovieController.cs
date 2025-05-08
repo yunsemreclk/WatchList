@@ -11,7 +11,11 @@ namespace WatchList.WebUI.Areas.Admin.Controllers
     [Area("Admin")]
     public class MovieController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
+        private readonly HttpClient _client;
+        public MovieController(IHttpClientFactory clientFactory)
+        {
+            _client = clientFactory.CreateClient("WatchListClient");
+        }
 
         public async Task<IActionResult> Index()
         {

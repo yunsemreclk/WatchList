@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.MovieDtos;
 using WatchList.WebUI.DTOs.SeriesDtos;
 using WatchList.WebUI.DTOs.TierListDtos;
-using WatchList.WebUI.Helpers;
+using WatchList.WebUI.Services.TokenServices;
 
 namespace WatchList.WebUI.Areas.User.Controllers
 {
@@ -13,12 +11,13 @@ namespace WatchList.WebUI.Areas.User.Controllers
     [Area("User")]
     public class TierListController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
-        private readonly UserManager<AppUser> _userManager;
+        private readonly HttpClient _client;
+        private readonly ITokenService _tokenService;
 
-        public TierListController(UserManager<AppUser> userManager)
+        public TierListController(ITokenService tokenService, IHttpClientFactory clientFactory)
         {
-            _userManager = userManager;
+            _tokenService = tokenService;
+            _client = clientFactory.CreateClient("WatchListClient");
         }
 
         public IActionResult Index()
@@ -40,8 +39,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateTierListDto createTierListDto)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            createTierListDto.AppUserId = user.Id;
+            var userId = _tokenService.GetUserId;
+            createTierListDto.AppUserId = userId;
             await _client.PostAsJsonAsync("tierlists", createTierListDto);
             return RedirectToAction("Index", "Lists");
         }
@@ -49,9 +48,9 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>($"movies/GetMovieByUserId/{user.Id}");
-            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>($"series/GetSeriesByUserId/{user.Id}");
+            var userId = _tokenService.GetUserId;
+            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>($"movies/GetMovieByUserId/{userId}");
+            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>($"series/GetSeriesByUserId/{userId}");
 
             var tierList = await _client.GetFromJsonAsync<UpdateTierListDto>($"tierlists/{Id}");
             var tierListItems = await _client.GetFromJsonAsync<List<ListTierListItemDto>>("tierlistitem/GetTierListItemByTierListId/" + tierList.Id);
@@ -101,9 +100,9 @@ namespace WatchList.WebUI.Areas.User.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>($"movies/GetMovieByUserId/{user.Id}");
-            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>($"series/GetSeriesByUserId/{user.Id}");
+            var userId = _tokenService.GetUserId;
+            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>($"movies/GetMovieByUserId/{userId}");
+            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>($"series/GetSeriesByUserId/{userId}");
             var tierList = await _client.GetFromJsonAsync<UpdateTierListDto>($"tierlists/{id}");
             var tierItems = await _client.GetFromJsonAsync<List<ListTierListItemDto>>($"tierlistitem/GetTierListItemByTierListId/{tierList.Id}");
 

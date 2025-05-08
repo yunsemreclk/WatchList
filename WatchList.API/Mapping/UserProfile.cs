@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using WatchList.DTO.DTOs.RoleDtos;
 using WatchList.DTO.DTOs.UserDtos;
 using WatchList.Entity.Entities;
 
@@ -9,7 +10,11 @@ namespace WatchList.API.Mapping
 
         public UserProfile()
         {
-            CreateMap<AppUser,RegisterDto>().ReverseMap();  
+            CreateMap<AppUser,RegisterDto>().ReverseMap();
+            CreateMap<AppRole, CreateRoleDto>().ReverseMap();
+            CreateMap<AppRole, UpdateRoleDto>().ReverseMap();
+            CreateMap<AppUser, ListUserDto>().ReverseMap();
+            
         }
     }
 }

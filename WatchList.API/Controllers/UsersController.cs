@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WatchList.Business.Abstract;
 using WatchList.DTO.DTOs.UserDtos;
+using WatchList.Entity.Entites;
 using WatchList.Entity.Entities;
 
 namespace WatchList.API.Controllers
@@ -50,5 +52,29 @@ namespace WatchList.API.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost("GetUserNamesById")]
+        public async Task<IActionResult> GetUserNamesById([FromBody] List<int> userIds)
+        {
+            var result = new List<ListUserDto>();
+
+            foreach (var id in userIds.Distinct())
+            {
+                var user = await _userManager.FindByIdAsync(id.ToString());
+                if (user != null)
+                {
+                    result.Add(new ListUserDto
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        ImageUrl = user.ImageUrl // varsa
+                    });
+                }
+            }
+
+            return Ok(result);
+        }
+
+
     }
 }

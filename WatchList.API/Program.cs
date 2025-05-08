@@ -24,8 +24,9 @@ namespace WatchList.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddServiceExtensions(builder.Configuration);
+            builder.Services.AddHttpContextAccessor();
+
             //Oluþturduðum repositorylerilerin(depo), api tarafýnda registration(kayýt) iþlerimin yapýlmasý
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly()); //registration
             builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));

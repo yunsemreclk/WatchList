@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.SeriesDtos;
-using WatchList.WebUI.Helpers;
+using WatchList.WebUI.Services.TokenServices;
 
 namespace WatchList.WebUI.Areas.User.Controllers
 {
@@ -11,22 +9,21 @@ namespace WatchList.WebUI.Areas.User.Controllers
     [Area("User")]
     public class SeriesController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
-        private readonly UserManager<AppUser> _userManager;
+        private readonly HttpClient _client;
+        private readonly ITokenService _tokenService;
 
-        public SeriesController(UserManager<AppUser> userManager)
+        public SeriesController(ITokenService tokenService, IHttpClientFactory clientFactory)
         {
-            _userManager = userManager;
+            _tokenService = tokenService;
+            _client = clientFactory.CreateClient("WatchListClient");
         }
+
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var values = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + user.Id);
+            var userId = _tokenService.GetUserId;
+            var values = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + userId);
             return View(values);
         }
-
-
-
 
         public async Task<IActionResult> DeleteSeries(int id)
         {
@@ -42,8 +39,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateSeriesDto createMovieDto)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
-            createMovieDto.AppUserId = user.Id;
+            var userId = _tokenService.GetUserId; //kişi
+            createMovieDto.AppUserId = userId;
             await _client.PostAsJsonAsync("series", createMovieDto);
             return RedirectToAction(nameof(Index));         
          

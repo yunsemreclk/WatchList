@@ -1,0 +1,46 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WatchList.DTO.DTOs.RoleDtos;
+using WatchList.Entity.Entities;
+
+namespace WatchList.API.Controllers
+{
+    [Authorize(Roles ="Admin")]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RolesController(RoleManager<AppRole> _roleManager, IMapper _mapper) : ControllerBase
+    {
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var values = _roleManager.Roles.ToListAsync();
+            return Ok(values);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateRole(CreateRoleDto model)
+        {
+            var role = _mapper.Map<AppRole>(model);
+            var result = await _roleManager.CreateAsync(role);
+            if (result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok("Role Oluşturuldu");
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var role = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == id);
+            if (role == null)
+            {
+                return NotFound("Rol Bulunamadı");
+            }
+            await _roleManager.DeleteAsync(role);
+            return Ok("Role Silindi");
+        }
+    }
+}

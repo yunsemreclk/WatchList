@@ -6,6 +6,5 @@ namespace WatchList.WebUI.DTOs.RoleDtos
     {
         public string Name { get; set; }
 
-        public string ConcurrencyStamp { get; set; }
     }
 }

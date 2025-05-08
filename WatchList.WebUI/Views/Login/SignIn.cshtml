@@ -16,13 +16,13 @@
 
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label">E-Posta</label>
-                            <input asp-for="Email" class="form-control" />
+                            <input asp-for="Email" class="form-control" required />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label">Şifre</label>
-                            <input asp-for="Password" class="form-control" type="password" />
+                            <input asp-for="Password" class="form-control" type="password" required />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 

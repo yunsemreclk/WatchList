@@ -1,11 +1,8 @@
+using System.Net.Http.Headers;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using WatchList.DataAccess.Context;
-using WatchList.Entity.Entities;
-using WatchList.WebUI.Services.RoleServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using WatchList.WebUI.Services.TokenServices;
 using WatchList.WebUI.Services.UserServices;
-using WatchList.WebUI.Validators;
 
 namespace WatchList.WebUI
 {
@@ -16,22 +13,36 @@ namespace WatchList.WebUI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IRoleService, RoleService>();
-            builder.Services.AddDbContext<WatchListContext>(opt =>
-            {
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
-            });
-            builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<WatchListContext>().AddErrorDescriber<CustomErrorDescriber>();
-            builder.Services.AddHttpClient();
 
-            builder.Services.ConfigureApplicationCookie(cfg =>
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddHttpClient("WatchListClient", cfg =>
             {
-                cfg.LoginPath = "/Login/SignIn";
-                cfg.LogoutPath = "/Login/SignOut";
-                cfg.AccessDeniedPath = "/ErrorPage/AccessDenied403";
+                var tokenService = builder.Services.BuildServiceProvider().GetRequiredService<ITokenService>();
+                var token = tokenService.GetUserToken;
+                cfg.BaseAddress = new Uri("https://localhost:7111/api/");
+                if (token != null)
+                {
+                    cfg.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenService.GetUserToken);
+                }
+
             });
+
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddCookie(JwtBearerDefaults.AuthenticationScheme, opt =>
+            {
+                opt.LoginPath = "/Login/SignIn";
+                opt.LogoutPath = "/Login/SignOut";
+                opt.AccessDeniedPath = "/ErrorPage/AccessDenied403";
+                opt.Cookie.SameSite = SameSiteMode.Strict;
+                opt.Cookie.HttpOnly = true;
+                opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                opt.Cookie.Name = "WatchListJwt";
+            });
+
+
             builder.Services.AddControllersWithViews();
 
 

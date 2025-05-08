@@ -1,23 +1,23 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.RoleDtos;
-using WatchList.WebUI.Services.RoleServices;
 
 namespace WatchList.WebUI.Areas.Admin.Controllers
 {
 
     [Authorize(Roles = "User")]
     [Area("Admin")]
-    public class RoleController(IRoleService roleService) : Controller
+    public class RoleController : Controller
     {
+        private readonly HttpClient _client;
+
+        public RoleController(IHttpClientFactory clientFactory)
+        {
+            _client = clientFactory.CreateClient("WatchListClient");
+        }
         public async Task<IActionResult> Index()
         {
-            var values = await roleService.GetAllRolesAsync();
+            var values = await _client.GetFromJsonAsync<List<ListRoleDto>>("roles");
             return View(values);
         }
 
@@ -28,12 +28,12 @@ namespace WatchList.WebUI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleDto createRoleDto)
         {
-            await roleService.CreateRoleAsync(createRoleDto);
+            await _client.PostAsJsonAsync("roles",createRoleDto);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> DeleteRole(int id)
         {
-            await roleService.DeleteRoleAsync(id);
+            await _client.DeleteAsync("roles/" + id);
             return RedirectToAction("Index");
         }
     }

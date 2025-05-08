@@ -1,12 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.UserDtos;
+using WatchList.WebUI.Models;
 
 namespace WatchList.WebUI.Services.UserServices
 {
-    public class UserService(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager) : IUserService
+    public class UserService : IUserService
     {
+        private readonly HttpClient _client;
+
+        public UserService(IHttpClientFactory clientFactory)
+        {
+            _client = clientFactory.CreateClient("WatchListClient");
+        }
+
         public async Task<bool> AssignRoleAsync(List<AssignRoleDto> assignRoleDto)
         {
             throw new NotImplementedException();
@@ -19,64 +25,33 @@ namespace WatchList.WebUI.Services.UserServices
 
         public async Task<IdentityResult> CreateUserAsync(UserRegisterDto userRegisterDto)
         {
-            var user = new AppUser
-            {
-                FirstName = userRegisterDto.FirstName,
-                LastName = userRegisterDto.LastName,
-                UserName = userRegisterDto.Username,
-                Email = userRegisterDto.Email
-            };
-            if (userRegisterDto.Password != userRegisterDto.ConfirmPassword) 
-            {
-                return new IdentityResult();
-            }
-            var result = await userManager.CreateAsync(user, userRegisterDto.Password);
-            if (result.Succeeded) 
-            {
-                await userManager.AddToRoleAsync(user, "User");
-                return result;
-            }
-            return result;
+            throw new NotImplementedException();
 
         }
 
-        public async Task<List<AppUser>> GetAppUsersAsync()
+        public async Task<List<UserViewModel>> GetAllUsersAsync()
         {
-            return await userManager.Users.ToListAsync();
+            return await _client.GetFromJsonAsync<List<UserViewModel>>("roleassigns");
         }
 
-        public async Task<AppUser> GetUserByIdAsync(int id)
+        public async Task<int> GetUserCount()
         {
-            return await userManager.Users.FirstOrDefaultAsync(x=>x.Id==id);
+            throw new NotImplementedException();
         }
 
         public async Task<string> LoginAsync(UserLoginDto userLoginDto)
         {
-            var user = await userManager.FindByEmailAsync(userLoginDto.Email);
-            if (user == null) 
-            {
-                return null;
-            }
-            var result = await signInManager.PasswordSignInAsync(user,userLoginDto.Password,false,false); //sürekli açık kalsın mı false
-            if (!result.Succeeded) return null;
-            else 
-            {
-                var IsAdmin = await userManager.IsInRoleAsync(user, "Admin");
-                if (IsAdmin) return "Admin";
-                var IsUser = await userManager.IsInRoleAsync(user, "User");
-                if (IsUser) return "User";
-            }
-
-            return null;
-
-
-            
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> LogoutAsync()
+        public async Task LogoutAsync()
         {
-            await signInManager.SignOutAsync();
-            return true;
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<AssignRoleDto>> GetUserForRoleAssign(int id)
+        {
+            return await _client.GetFromJsonAsync<List<AssignRoleDto>>("roleAssigns/" + id);
         }
     }
 }

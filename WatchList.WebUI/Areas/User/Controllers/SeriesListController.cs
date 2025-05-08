@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WatchList.Entity.Entites;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.SeriesDtos;
 using WatchList.WebUI.DTOs.SeriesListDtos;
-using WatchList.WebUI.Helpers;
+using WatchList.WebUI.Services.TokenServices;
 
 namespace WatchList.WebUI.Areas.User.Controllers
 {
@@ -13,11 +10,12 @@ namespace WatchList.WebUI.Areas.User.Controllers
     [Area("User")]
     public class SeriesListController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
-        private readonly UserManager<AppUser> _userManager;
-        public SeriesListController(UserManager<AppUser> userManager)
+        private readonly HttpClient _client;
+        private readonly ITokenService _tokenService;
+        public SeriesListController(ITokenService tokenService, IHttpClientFactory clientFactory)
         {
-            _userManager = userManager;
+            _tokenService = tokenService;
+            _client = clientFactory.CreateClient("WatchListClient");
         }
         public IActionResult Index()
         {
@@ -39,8 +37,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateSeriesListDto createSeriesListDto)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
-            createSeriesListDto.AppUserId = user.Id;
+            var userId = _tokenService.GetUserId;
+            createSeriesListDto.AppUserId = userId;
             await _client.PostAsJsonAsync("serieslists", createSeriesListDto);
             return RedirectToAction("Index","Lists");
         }
@@ -48,8 +46,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + user.Id);
+            var userId = _tokenService.GetUserId;
+            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + userId);
             var seriesList = await _client.GetFromJsonAsync<UpdateSeriesListDto>($"serieslists/{Id}");
             var seriesListItem = await _client.GetFromJsonAsync<List<ListSeriesListItemDto>>("serieslistitem/GetSeriesListItemBySeriesListId/" + seriesList.Id);
 
@@ -93,9 +91,9 @@ namespace WatchList.WebUI.Areas.User.Controllers
 
         public async Task<IActionResult> Details(int Id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userId = _tokenService.GetUserId;
 
-            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + user.Id);
+            var series = await _client.GetFromJsonAsync<List<ListSeriesDto>>("series/GetSeriesByUserId/" + userId);
             var seriesList = await _client.GetFromJsonAsync<UpdateSeriesListDto>($"serieslists/{Id}");
             var seriesListItem = await _client.GetFromJsonAsync<List<ListSeriesListItemDto>>("serieslistitem/GetSeriesListItemBySeriesListId/" + seriesList.Id);
 

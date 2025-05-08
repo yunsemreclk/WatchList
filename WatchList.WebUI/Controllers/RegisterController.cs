@@ -7,7 +7,11 @@ namespace WatchList.WebUI.Controllers
 {
     public class RegisterController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
+        private readonly HttpClient _client;
+        public RegisterController(IHttpClientFactory clientFactory)
+        {
+            _client = clientFactory.CreateClient("WatchListClient");
+        }
         public IActionResult SignUp()
         {
             return View();

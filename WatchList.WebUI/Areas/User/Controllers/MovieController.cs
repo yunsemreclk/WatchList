@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.MovieDtos;
-using WatchList.WebUI.Helpers;
+using WatchList.WebUI.Services.TokenServices;
 
 namespace WatchList.WebUI.Areas.User.Controllers
 {
@@ -11,17 +9,18 @@ namespace WatchList.WebUI.Areas.User.Controllers
     [Area("User")]
     public class MovieController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
-        private readonly UserManager<AppUser> _userManager;
+        private readonly HttpClient _client;
+        private readonly ITokenService _tokenService;
 
-        public MovieController(UserManager<AppUser> userManager)
+        public MovieController(ITokenService tokenService, IHttpClientFactory clientFactory)
         {
-            _userManager = userManager;
+            _tokenService = tokenService;
+            _client = clientFactory.CreateClient("WatchListClient");
         }
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var values = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + user.Id);
+            var userId = _tokenService.GetUserId;
+            var values = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + userId);
             return View(values);
         }
 
@@ -39,14 +38,11 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieDto createMovieDto)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
-            createMovieDto.AppUserId = user.Id;
+            var userId = _tokenService.GetUserId; //kişi
+            createMovieDto.AppUserId = userId;
             await _client.PostAsJsonAsync("movies", createMovieDto);
             return RedirectToAction(nameof(Index));
-
         }
-
-
 
         public async Task<IActionResult> UpdateMovie(int id)
         {
@@ -61,7 +57,6 @@ namespace WatchList.WebUI.Areas.User.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
     }
+
 }

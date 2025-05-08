@@ -1,14 +1,8 @@
-﻿using System.Net.Http.Json;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using WatchList.Entity.Entites;
-using WatchList.Entity.Entities;
 using WatchList.WebUI.DTOs.MovieDtos;
 using WatchList.WebUI.DTOs.MovieListDtos;
-using WatchList.WebUI.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using WatchList.WebUI.Services.TokenServices;
 
 
 namespace WatchList.WebUI.Areas.User.Controllers
@@ -17,11 +11,13 @@ namespace WatchList.WebUI.Areas.User.Controllers
     [Area("User")]
     public class MovieListController : Controller
     {
-        private readonly HttpClient _client = HttpClientInstance.CreateClient();
-        private readonly UserManager<AppUser> _userManager;
-        public MovieListController(UserManager<AppUser> userManager)
+        private readonly HttpClient _client;
+        private readonly ITokenService _tokenService;
+
+        public MovieListController(ITokenService tokenService, IHttpClientFactory clientFactory)
         {
-            _userManager = userManager;
+            _tokenService = tokenService;
+            _client = clientFactory.CreateClient("WatchListClient");
         }
 
         public async Task<IActionResult> Index()
@@ -44,8 +40,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieListDto createMovieListDto)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name); //kişi
-            createMovieListDto.AppUserId = user.Id;
+            var userId = _tokenService.GetUserId;
+            createMovieListDto.AppUserId = userId;
             await _client.PostAsJsonAsync("movielists", createMovieListDto);
             return RedirectToAction("Index", "Lists");
         }
@@ -53,8 +49,8 @@ namespace WatchList.WebUI.Areas.User.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + user.Id);
+            var userId = _tokenService.GetUserId;
+            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + userId);
             var movieList = await _client.GetFromJsonAsync<UpdateMovieListDto>($"movielists/{Id}");
             var movieListItem = await _client.GetFromJsonAsync<List<ListMovieListItemDto>>("movielistitem/GetMovieListItemByMovieListId/" + movieList.Id);
 
@@ -100,9 +96,9 @@ namespace WatchList.WebUI.Areas.User.Controllers
 
         public async Task<IActionResult> Details(int Id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userId = _tokenService.GetUserId;
 
-            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + user.Id);
+            var movies = await _client.GetFromJsonAsync<List<ListMovieDto>>("movies/GetMovieByUserId/" + userId);
             var movieList = await _client.GetFromJsonAsync<UpdateMovieListDto>($"movielists/{Id}");
             var movieListItem = await _client.GetFromJsonAsync<List<ListMovieListItemDto>>("movielistitem/GetMovieListItemByMovieListId/" + movieList.Id);
 
