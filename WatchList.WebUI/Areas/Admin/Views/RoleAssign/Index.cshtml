@@ -1,4 +1,4 @@
-﻿@model List<ListUserDto>
+﻿@model List<UserViewModel>
 @{
     ViewData["Title"] = "Kullanıcı Listesi";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -20,7 +20,7 @@
         count++;
         <tr>
             <th>@count</th>
-            <td>@item.FirstName @item.LastName</td>
+            <td>@item.NameSurname</td>
             <td>@item.UserName</td>
             <td>              
                 <a asp-action="AssignRole" asp-controller="RoleAssign" asp-area="Admin" asp-route-id="@item.Id" class="btn btn-outline-info">Rol Ata</a>

@@ -40,6 +40,7 @@ namespace WatchList.WebUI
                 opt.Cookie.HttpOnly = true;
                 opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 opt.Cookie.Name = "WatchListJwt";
+                opt.SlidingExpiration = true;
             });
 
 

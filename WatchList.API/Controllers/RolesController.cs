@@ -17,7 +17,7 @@ namespace WatchList.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var values = _roleManager.Roles.ToListAsync();
+            var values = await _roleManager.Roles.ToListAsync();
             return Ok(values);
         }
         [HttpPost]

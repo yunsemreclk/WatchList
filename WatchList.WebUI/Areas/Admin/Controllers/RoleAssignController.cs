@@ -35,7 +35,7 @@ namespace WatchList.WebUI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignRole(List<AssignRoleDto> assignRoleList)
         {
-            var result= await _client.PostAsJsonAsync("roleAssigns", assignRoleList);
+            var result= await _client.PostAsJsonAsync("roleassigns", assignRoleList);
             if(result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");

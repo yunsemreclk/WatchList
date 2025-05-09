@@ -5,7 +5,7 @@ using WatchList.WebUI.DTOs.RoleDtos;
 namespace WatchList.WebUI.Areas.Admin.Controllers
 {
 
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "Admin")]
     [Area("Admin")]
     public class RoleController : Controller
     {

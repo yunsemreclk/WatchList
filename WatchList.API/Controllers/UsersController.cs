@@ -11,6 +11,7 @@ using WatchList.Entity.Entities;
 
 namespace WatchList.API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController(UserManager<AppUser> _userManager, SignInManager<AppUser> _signInManager, IJwtService _jwtService, IMapper _mapper) : ControllerBase

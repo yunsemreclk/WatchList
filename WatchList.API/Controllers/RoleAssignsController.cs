@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,10 @@ using WatchList.Entity.Entities;
 
 namespace WatchList.API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
-    public class RoleAssignsController(IUserService _userService, UserManager<AppUser> _userManager, RoleManager<AppRole> _roleManager, IHttpContextAccessor _contextAccessor) : ControllerBase
+    public class RoleAssignsController(IUserService _userService, UserManager<AppUser> _userManager, RoleManager<AppRole> _roleManager) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
@@ -32,6 +34,7 @@ namespace WatchList.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserForRoleAssign(int id)
         {
+
             var user = await _userService.GetUserByIdAsync(id); //id ye göre kullanıcıyı bul
 
             var roles = await _roleManager.Roles.ToListAsync(); //rolleri listeleme
@@ -43,6 +46,7 @@ namespace WatchList.API.Controllers
             foreach (var role in roles)
             {
                 var assignRole = new AssignRoleDto();
+                assignRole.UserId = user.Id;
                 assignRole.RoleId = role.Id;
                 assignRole.RoleName = role.Name;
                 assignRole.RoleExist = userRoles.Contains(role.Name);
@@ -55,7 +59,7 @@ namespace WatchList.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignRole(List<AssignRoleDto> assignRoleList)
         {
-            int userId = int.Parse(_contextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = assignRoleList.Select(x => x.UserId).FirstOrDefault();
 
             var user = await _userService.GetUserByIdAsync(userId);
 

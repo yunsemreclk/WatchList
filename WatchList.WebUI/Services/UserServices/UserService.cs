@@ -51,7 +51,7 @@ namespace WatchList.WebUI.Services.UserServices
 
         public async Task<List<AssignRoleDto>> GetUserForRoleAssign(int id)
         {
-            return await _client.GetFromJsonAsync<List<AssignRoleDto>>("roleAssigns/" + id);
+            return await _client.GetFromJsonAsync<List<AssignRoleDto>>("roleassigns/" + id);
         }
     }
 }
