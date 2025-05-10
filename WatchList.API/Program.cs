@@ -44,7 +44,7 @@ namespace WatchList.API
             builder.Services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme= JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultAuthenticateScheme=JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme= JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 options.RequireHttpsMetadata= false;

@@ -1,0 +1,32 @@
+﻿@model List<WatchList.WebUI.DTOs.External.TMDbMovieSearchResultDto>
+
+@{
+    ViewData["Title"] = "TMDb Film Arama";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<h2>TMDb Film Arama</h2>
+
+<form method="post">
+    <input type="text" name="query" placeholder="Film adı girin..." class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Ara</button>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <hr />
+    <div class="row">
+        @foreach (var movie in Model)
+        {
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <img src="@movie.PosterPath" class="card-img-top" alt="@movie.Title" />
+                    <div class="card-body">
+                        <h5 class="card-title">@movie.Title</h5>
+                        <p class="card-text">@movie.ReleaseDate</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
