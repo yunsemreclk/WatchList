@@ -76,7 +76,7 @@ namespace WatchList.WebUI.Areas.User.Controllers
         {
             if (string.IsNullOrWhiteSpace(query)) return View();
 
-            var response = await _client.GetFromJsonAsync<List<TMDbMovieSearchResultDto>>($"TMDbMovies/search?query={query}");
+            var response = await _client.GetFromJsonAsync<List<TMDbMovieSearchResultDto>>($"TMDbMovies/searchMovies?query={query}");
             return View(response);
         }
 

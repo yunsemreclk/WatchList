@@ -7,14 +7,14 @@ using System.Collections.Generic;
 using WatchList.DTO.DTOs.External;
 using WatchList.Business.Abstract;
 
-public class TMDbService : ITMDbService
+public class TMDbMovieService : ITMDbMovieService
 {
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;
     private readonly string _baseUrl;
     private readonly string _bearerToken;
 
-    public TMDbService(IConfiguration configuration)
+    public TMDbMovieService(IConfiguration configuration)
     {
         _httpClient = new HttpClient();
         _apiKey = configuration["TMDb:ApiKey"];

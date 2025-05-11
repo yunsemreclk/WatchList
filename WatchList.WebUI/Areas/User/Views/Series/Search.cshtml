@@ -1,0 +1,37 @@
+﻿@model List<WatchList.WebUI.DTOs.External.TMDbSeriesSearchResultDto>
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+
+<h2>TMDb Dizi Arama</h2>
+
+<form method="post">
+    <input type="text" name="query" placeholder="Dizi adı girin..." class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Ara</button>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <hr />
+    <div class="row">
+        @foreach (var series in Model)
+        {
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <img src="@series.PosterPath" class="card-img-top" alt="@series.Title" />
+                    <div class="card-body">
+                        <h5 class="card-title">@series.Title</h5>
+                        <form method="post" asp-action="SelectSeriesFromSearch">
+                            <input type="hidden" name="selectedSeries.Title" value="@series.Title" />
+                            <input type="hidden" name="selectedSeries.PosterPath" value="@series.PosterPath" />
+
+                            <button type="submit" class="btn btn-success btn-sm">Bu Diziyi Ekle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

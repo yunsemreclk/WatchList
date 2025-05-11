@@ -6,22 +6,20 @@ namespace WatchList.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TMDbMoviesController : ControllerBase
+    public class TMDbSeriesController : ControllerBase
     {
-        private readonly ITMDbMovieService _tmdbService;
+        private readonly ITMDbSeriesService _tmdbService;
 
-        public TMDbMoviesController(ITMDbMovieService tmdbService)
+        public TMDbSeriesController(ITMDbSeriesService tmdbService)
         {
             _tmdbService = tmdbService;
         }
 
-        [HttpGet("searchMovies")]
+        [HttpGet("searchSeries")]
         public async Task<IActionResult> Search([FromQuery] string query)
         {
-            var results = await _tmdbService.SearchMoviesAsync(query);
+            var results = await _tmdbService.SearchSeriesAsync(query);
             return Ok(results);
         }
-
     }
-
 }

@@ -7,8 +7,9 @@ using WatchList.DTO.DTOs.External;
 
 namespace WatchList.Business.Abstract
 {
-    public interface ITMDbService
+    public interface ITMDbMovieService
     {
         Task<List<TMDbMovieSearchResultDto>> SearchMoviesAsync(string query);
+
     }
 }
