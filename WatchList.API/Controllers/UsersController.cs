@@ -76,6 +76,19 @@ namespace WatchList.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("profile/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetUserProfile(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user == null)
+                return NotFound("Kullanıcı bulunamadı.");
+
+            var dto = _mapper.Map<UserProfileDto>(user);
+            return Ok(dto);
+        }
+
 
     }
 }

@@ -1,0 +1,49 @@
+﻿@model WatchList.WebUI.DTOs.UserDtos.UserProfileDto
+@{
+    ViewData["Title"] = "Profilim";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="card p-4 shadow-sm">
+        <div class="d-flex justify-content-between">
+            <h2>@Model.FirstName @Model.LastName</h2>
+            <a href="@Url.Action("Edit", "UserProfile", new { area = "User" })" class="btn btn-primary">Düzenle</a>
+        </div>
+        <p><strong>Kullanıcı Adı:</strong> @Model.Username</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+
+        <div class="mb-3">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Profil Fotoğrafı" class="rounded-circle" width="150" />
+            }
+            else
+            {
+                <div class="rounded-circle placeholder-image d-flex justify-content-center align-items-center" style="width: 150px; height: 150px;">
+                    <span class="text-white">@Model.FirstName.Substring(0, 1)</span> <!-- İlk harf -->
+                </div>
+            }
+        </div>
+
+
+
+        <div class="mt-4">
+            <a href="@Url.Action("ChangePassword", "UserProfile", new { area = "User" })" class="btn btn-warning">Şifreyi Değiştir</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .placeholder-image {
+        background-color: #6c757d; /* Placeholder için gri renk */
+        font-size: 40px;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+        border: 2px solid #fff; /* Kenarlık */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>

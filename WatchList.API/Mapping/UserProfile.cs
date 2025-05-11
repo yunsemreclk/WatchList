@@ -14,6 +14,7 @@ namespace WatchList.API.Mapping
             CreateMap<AppRole, CreateRoleDto>().ReverseMap();
             CreateMap<AppRole, UpdateRoleDto>().ReverseMap();
             CreateMap<AppUser, ListUserDto>().ReverseMap();
+            CreateMap<AppUser, UserProfileDto>().ReverseMap();
             
         }
     }
