@@ -13,8 +13,6 @@ namespace WatchList.WebUI.DTOs.MovieDtos
         public int ReleaseYear { get; set; }
         public DateTime? WatchDate { get; set; }
         public string PosterUrl { get; set; }
-        public bool IsShared { get; set; }
-
         public int AppUserId { get; set; }
 
     }

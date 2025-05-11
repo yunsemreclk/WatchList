@@ -21,5 +21,7 @@ namespace WatchList.API.Controllers
             var results = await _tmdbService.SearchMoviesAsync(query);
             return Ok(results);
         }
+
     }
+
 }

@@ -24,6 +24,14 @@
                     <div class="card-body">
                         <h5 class="card-title">@movie.Title</h5>
                         <p class="card-text">@movie.ReleaseDate</p>
+
+                        <!-- Film seçildikten sonra direkt olarak ekleme yapılacak -->
+                        <form method="post" asp-action="SelectMovieFromSearch">
+                            <input type="hidden" name="Title" value="@movie.Title" />
+                            <input type="hidden" name="ReleaseDate" value="@movie.ReleaseDate" />
+                            <input type="hidden" name="PosterPath" value="@movie.PosterPath" />
+                            <button type="submit" class="btn btn-success btn-sm">Bu Filmi Ekle</button>
+                        </form>
                     </div>
                 </div>
             </div>
