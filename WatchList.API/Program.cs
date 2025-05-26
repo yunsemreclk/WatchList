@@ -29,8 +29,7 @@ namespace WatchList.API
 
             //Oluþturduðum repositorylerilerin(depo), api tarafýnda registration(kayýt) iþlerimin yapýlmasý
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly()); //registration
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericManager<>));
+
 
 
             builder.Services.AddDbContext<WatchListContext>(options => 
