@@ -12,8 +12,8 @@ using WatchList.DataAccess.Context;
 namespace WatchList.DataAccess.Migrations
 {
     [DbContext(typeof(WatchListContext))]
-    [Migration("20250429135602_mig_add_identity")]
-    partial class mig_add_identity
+    [Migration("20250530014146_InitialRelease")]
+    partial class InitialRelease
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,6 +136,9 @@ namespace WatchList.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("LikedDate")
                         .HasColumnType("datetime2");
 
@@ -157,6 +160,8 @@ namespace WatchList.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.HasIndex("MovieListId");
 
                     b.HasIndex("SeriesListId");
@@ -173,6 +178,9 @@ namespace WatchList.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -199,6 +207,8 @@ namespace WatchList.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.ToTable("Movies");
                 });
 
@@ -209,6 +219,9 @@ namespace WatchList.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -221,6 +234,8 @@ namespace WatchList.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("MovieLists");
                 });
@@ -257,6 +272,9 @@ namespace WatchList.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -291,6 +309,8 @@ namespace WatchList.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.ToTable("Series");
                 });
 
@@ -301,6 +321,9 @@ namespace WatchList.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -313,6 +336,8 @@ namespace WatchList.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("SeriesLists");
                 });
@@ -349,6 +374,9 @@ namespace WatchList.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AppUserId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -361,6 +389,8 @@ namespace WatchList.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId");
+
                     b.ToTable("TierLists");
                 });
 
@@ -372,16 +402,15 @@ namespace WatchList.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ItemType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PosterUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SeriesId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Tier")
                         .IsRequired()
@@ -390,11 +419,11 @@ namespace WatchList.DataAccess.Migrations
                     b.Property<int>("TierListId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("SeriesId");
 
                     b.HasIndex("TierListId");
 
@@ -563,6 +592,10 @@ namespace WatchList.DataAccess.Migrations
 
             modelBuilder.Entity("WatchList.Entity.Entites.Like", b =>
                 {
+                    b.HasOne("WatchList.Entity.Entities.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+
                     b.HasOne("WatchList.Entity.Entites.MovieList", null)
                         .WithMany("Likes")
                         .HasForeignKey("MovieListId");
@@ -574,6 +607,26 @@ namespace WatchList.DataAccess.Migrations
                     b.HasOne("WatchList.Entity.Entites.TierList", null)
                         .WithMany("Likes")
                         .HasForeignKey("TierListId");
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("WatchList.Entity.Entites.Movie", b =>
+                {
+                    b.HasOne("WatchList.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("Movies")
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("WatchList.Entity.Entites.MovieList", b =>
+                {
+                    b.HasOne("WatchList.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("MovieLists")
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("WatchList.Entity.Entites.MovieListItem", b =>
@@ -581,13 +634,13 @@ namespace WatchList.DataAccess.Migrations
                     b.HasOne("WatchList.Entity.Entites.Movie", "Movie")
                         .WithMany("MovieListItems")
                         .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WatchList.Entity.Entites.MovieList", "MovieList")
                         .WithMany("Movies")
                         .HasForeignKey("MovieListId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Movie");
@@ -595,18 +648,36 @@ namespace WatchList.DataAccess.Migrations
                     b.Navigation("MovieList");
                 });
 
+            modelBuilder.Entity("WatchList.Entity.Entites.Series", b =>
+                {
+                    b.HasOne("WatchList.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("Series")
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("WatchList.Entity.Entites.SeriesList", b =>
+                {
+                    b.HasOne("WatchList.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("SeriesLists")
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("WatchList.Entity.Entites.SeriesListItem", b =>
                 {
                     b.HasOne("WatchList.Entity.Entites.Series", "Series")
                         .WithMany("SeriesListItems")
                         .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WatchList.Entity.Entites.SeriesList", "SeriesList")
                         .WithMany("Series")
                         .HasForeignKey("SeriesListId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Series");
@@ -614,13 +685,36 @@ namespace WatchList.DataAccess.Migrations
                     b.Navigation("SeriesList");
                 });
 
+            modelBuilder.Entity("WatchList.Entity.Entites.TierList", b =>
+                {
+                    b.HasOne("WatchList.Entity.Entities.AppUser", "AppUser")
+                        .WithMany("TierLists")
+                        .HasForeignKey("AppUserId");
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("WatchList.Entity.Entites.TierListItem", b =>
                 {
+                    b.HasOne("WatchList.Entity.Entites.Movie", "Movie")
+                        .WithMany("TierListItems")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("WatchList.Entity.Entites.Series", "Series")
+                        .WithMany("TierListItems")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("WatchList.Entity.Entites.TierList", "TierList")
                         .WithMany("Items")
                         .HasForeignKey("TierListId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Series");
 
                     b.Navigation("TierList");
                 });
@@ -628,6 +722,8 @@ namespace WatchList.DataAccess.Migrations
             modelBuilder.Entity("WatchList.Entity.Entites.Movie", b =>
                 {
                     b.Navigation("MovieListItems");
+
+                    b.Navigation("TierListItems");
                 });
 
             modelBuilder.Entity("WatchList.Entity.Entites.MovieList", b =>
@@ -640,6 +736,8 @@ namespace WatchList.DataAccess.Migrations
             modelBuilder.Entity("WatchList.Entity.Entites.Series", b =>
                 {
                     b.Navigation("SeriesListItems");
+
+                    b.Navigation("TierListItems");
                 });
 
             modelBuilder.Entity("WatchList.Entity.Entites.SeriesList", b =>
@@ -654,6 +752,19 @@ namespace WatchList.DataAccess.Migrations
                     b.Navigation("Items");
 
                     b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("WatchList.Entity.Entities.AppUser", b =>
+                {
+                    b.Navigation("MovieLists");
+
+                    b.Navigation("Movies");
+
+                    b.Navigation("Series");
+
+                    b.Navigation("SeriesLists");
+
+                    b.Navigation("TierLists");
                 });
 #pragma warning restore 612, 618
         }
