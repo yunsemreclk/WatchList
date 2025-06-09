@@ -363,5 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Ignore development settings to keep secrets safe
-//appsettings.Development.json
+appsettings.Development.json
 
